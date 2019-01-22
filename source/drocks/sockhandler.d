@@ -1,9 +1,8 @@
 module drocks.sockhandler;
 
-import std.stdio;
+//import std.stdio;
 import std.socket : TcpSocket, InternetAddress, recv;
 //import std.socket : recv, SocketFlags;
-//import std.socket;
 
 public import drocks.exception : ClientException;
 
@@ -18,25 +17,22 @@ class SockHandler
 private:
     TcpSocket _sock;
     bool   _opened = false;
-    bool   _valid = true;
+    bool   _valid  = true;
 
 public:
     this(TcpSocket sock)
     {
-        "Open sock1|||||".writeln; 
         _opened = true;
-        _sock     = sock;
+        _sock   = sock;
     }
     this()
     {
-        "Open sock2|||||".writeln;
         _opened = false;
-        _sock     = new TcpSocket();
+        _sock   = new TcpSocket();
     }
 
     ~this()
     {
-        "close sock ~this".writeln;
         this.close();
     }
 
@@ -47,11 +43,9 @@ public:
     
     void close()
     {
-        //"close sock________".writeln;
         if(_opened) {
-            "\t\t\t\t\t\t\tclose sock__........".writeln;
             _sock.close();
-            //_opened = false;
+            _opened = false;
         }
     }
 
@@ -82,6 +76,7 @@ public:
         
         return _line_buf;
     }
+    
     // Receives a line from socket
     char[] readLine()
     {
