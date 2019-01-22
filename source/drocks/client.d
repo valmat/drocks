@@ -1,6 +1,6 @@
 module drocks.client;
 
-//import std.stdio : stderr, writeln;
+import std.stdio : stderr, writeln;
 import std.range   : join, isInputRange, ElementType;
 import std.traits  : isIntegral;
 import std.conv    : to;
@@ -45,6 +45,12 @@ public:
         return _req.httpGet("mget", range).getMultiPair();
     }
 
+    auto get(Args...)(auto ref Args args)
+        if(Args.length > 1 && is(Args[0] == string))
+    {
+        return _req.httpGet("mget", args).getMultiPair();
+    }
+
     // set value for key
     bool set(string key, string val)
     {
@@ -75,10 +81,17 @@ public:
         return _req.httpPost("mdel", keys).isOk();
     }
 
+    auto del(Args...)(auto ref Args args)
+        if(Args.length > 1 && is(Args[0] == string))
+    {
+        return _req.httpPost("mdel", args).isOk();
+    }
+
+
     // incriment value by key
     bool incr(string key, long value)
     {
-        return _req.httpPost("incr", key ~ "\n" ~ value.to!string ).isOk();
+        return _req.httpPost("incr", key, value ).isOk();
     }
     bool incr(string key)
     {

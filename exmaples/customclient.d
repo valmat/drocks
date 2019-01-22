@@ -9,7 +9,7 @@ struct CustomClient
     // incriment value by key
     long getIncr(string key, long value)
     {
-        return _db.request.httpPost("get-incr", key ~ "\n" ~ value.to!string ).getValue().to!long;
+        return _db.request.httpPost("get-incr", key, value).getValue().to!long;
     }
     long getIncr(string key)
     {

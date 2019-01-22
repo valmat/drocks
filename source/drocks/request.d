@@ -5,7 +5,9 @@ import std.range     : join, isInputRange, ElementType;
 import std.traits    : isIntegral;
 import std.algorithm : map;
 import std.socket    : InternetAddress, SocketException;
+import std.typecons  : Tuple, tuple;
 import std.conv      : to;
+
 static import uri = std.uri;
 
 public import drocks.exception : ClientException;
@@ -66,7 +68,7 @@ public:
     //
     // GET requests
     //
-    Response httpGet(string path)
+    Response httpGet(const string path)
     {
         string buf;
         buf  = "GET /" ~ path  ~ " HTTP/1.1\r\n" ~
@@ -75,7 +77,7 @@ public:
         return this.request(buf);
     }
 
-    Response httpGet(string path, string data)
+    Response httpGet(const string path, string data)
     {
         string buf;
         buf  = "GET /" ~ path  ~ "?" ~ uri.encode(data) ~ " HTTP/1.1\r\n" ~
@@ -84,17 +86,15 @@ public:
         return this.request(buf);
     }
 
-    Response httpGet(T)(string path, auto ref T data)
+    Response httpGet(T)(const string path, auto ref T data)
         if(isIntegral!T)
     {
         return this.httpGet(path, data.to!string);
     }
 
-    Response httpGet(Range)(string path, auto ref Range range)
+    Response httpGet(Range)(const string path, auto ref Range range)
         if(isInputRange!Range && is(ElementType!Range == string))
     {
-        static import uri = std.uri;
-        string buf;
         string data = range
             .map!( (const string x) {return uri.encode(x);})
             .join("&");
@@ -102,10 +102,16 @@ public:
         return this.httpGet(path, data);
     }
 
+    Response httpGet(Args...)(const string path, auto ref Args args)
+        if(Args.length > 1)
+    {
+        return this.httpGet(path, join(tuple(args), '&'));
+    }
+
     //
     // POST requests
     //
-    Response httpPost(string path, string data)
+    Response httpPost(const string path, string data)
     {
         string buf;
         buf  = headsStartPost(path) ~
@@ -115,24 +121,24 @@ public:
         return this.request(buf);
     }
 
-    Response httpPost(T)(string path, auto ref T data)
+    Response httpPost(T)(const string path, auto ref T data)
         if(isIntegral!T)
     {
         return this.httpPost(path, data.to!string);
     }
 
-    Response httpPost(string path)
+    Response httpPost(const string path)
     {
         return this.request( headsStartPost(path) ~ headsEnd );
     }
 
-    Response httpPost(Range)(string path, auto ref Range range)
+    Response httpPost(Range)(const string path, auto ref Range range)
         if(isInputRange!Range && is(ElementType!Range == string))
     {
         return this.httpPost(path, range.join("\n"));
     }
 
-    Response httpPost(Range)(string path, auto ref Range range)
+    Response httpPost(Range)(const string path, auto ref Range range)
         if(isInputRange!Range && is(ElementType!Range == Pair))
     {
         string data = range
@@ -142,20 +148,45 @@ public:
         return this.httpPost(path, data);
     }
 
-    Response httpPost(Range)(string path, auto ref Range range)
+    Response httpPost(Range)(const string path, auto ref Range range)
         if(isInputRange!Range && isIntegral!(ElementType!Range))
     {
         return this.httpPost(path, range.map!"a.to!string");
     }
 
+    Response httpPost(Args...)(const string path, auto ref Args args)
+        if(Args.length > 1)
+    {
+        return this.httpPost(path, join(tuple(args), '\n'));
+    }
+
 
 private:
+
+    static string join(Args...)(auto ref Tuple!Args args, char c)
+        if(Args.length > 0)
+    {
+        static if(is(Args[0] == string)) {
+            string data = args[0];
+        } else {
+            string data = args[0].to!string;
+        }
+        
+        static foreach(enum ind; 1..Args.length) {
+            static if(is(Args[ind] == string)) {
+                data ~= c ~ args[ind];
+            } else {
+                data ~= c ~ args[ind].to!string;
+            }
+        }
+        return data;
+    }
 
     enum string  headsEnd = 
         "Content-Type: charset=UTF-8\r\n" ~
         "Connection: Close\r\n\r\n";
 
-    string headsStartPost(string path)
+    string headsStartPost(const string path)
     {
         return 
             "POST /" ~ path ~ " HTTP/1.1\r\n" ~

@@ -10,12 +10,16 @@ void main()
     auto db = Client.createDefault();
 
     try {
-        writeln(`[db.get("key1")]:`);
-        [db.get("key1")].writeln;
-        writeln(`[db.get("key2")]:`);
-        [db.get("key2")].writeln;
-        writeln(`[db.get("key3")]:`);
-        [db.get("key3")].writeln;
+        //writeln(`[db.get("key1")]:`);
+        //[db.get("key1")].writeln;
+        //writeln(`[db.get("key2")]:`);
+        //[db.get("key2")].writeln;
+        //writeln(`[db.get("key3")]:`);
+        //[db.get("key3")].writeln;
+
+        writeln(`[db.get("key1", "key2", "keyq")]:`);
+        [db.get("key1", "key2", "keyq")].writeln;
+
 
         //writeln(`[db.set("key q", "QQQ QQQ")]:`);
         //[db.set("keyq", "QQQ QQQ")].writeln;
@@ -42,33 +46,35 @@ void main()
         //writeln(`[db.get("key2del")]:`);
         //[db.get("key2del")].writeln;
 
-        `[db.set(["key-1","key-2","key-3",])]`.writeln;
-        [db.set([
-            Pair("key-1", "val-1"),
-            Pair("key-2", "val-2"),
-            Pair("key-3", "val-3"),
-        ])].writeln;
-        `[db.get(["key-1","key-2","key-3",])]`.writeln;
-        [db.get(["key-1","key-2","key-3",])].writeln;
+        //`[db.set(["key-1","key-2","key-3",])]`.writeln;
+        //[db.set([
+        //    Pair("key-1", "val-1"),
+        //    Pair("key-2", "val-2"),
+        //    Pair("key-3", "val-3"),
+        //])].writeln;
+        //`[db.get(["key-1","key-2","key-3",])]`.writeln;
+        //[db.get(["key-1","key-2","key-3",])].writeln;
 
-        `[db.del(["key-1","key-2","key-3",])]`.writeln;
-        [db.del(["key-1","key-2","key-3",])].writeln;
-        `[db.get(["key-1","key-2","key-3",])]`.writeln;
-        [db.get(["key-1","key-2","key-3",])].writeln;
+        //`[db.del(["key-1","key-2","key-3",])]`.writeln;
+        ////[db.del(["key-1","key-2","key-3",])].writeln;
+        //[db.del("key-1","key-2","key-3")].writeln;
 
-        `[db.get(["key-1","key-2","key-3",])]`.writeln;
-        [db.get(["key-1","key-2","key-3",])].writeln;
+        //`[db.get(["key-1","key-2","key-3",])]`.writeln;
+        //[db.get(["key-1","key-2","key-3",])].writeln;
 
-        //`[db.incr]`.writeln;
-        //[db.incr("incr1"     )].writeln;
-        //[db.incr("incr2",   5)].writeln;
-        //[db.incr("incr3", -11)].writeln;
-        //writeln(`[db.get("incr1")]:`);
-        //[db.get("incr1")].writeln;
-        //writeln(`[db.get("incr2")]:`);
-        //[db.get("incr2")].writeln;
-        //writeln(`[db.get("incr3")]:`);
-        //[db.get("incr3")].writeln;
+        //`[db.get(["key-1","key-2","key-3",])]`.writeln;
+        //[db.get(["key-1","key-2","key-3",])].writeln;
+
+        `[db.incr]`.writeln;
+        [db.incr("incr1"     )].writeln;
+        [db.incr("incr2",   5)].writeln;
+        [db.incr("incr3", -11)].writeln;
+        writeln(`[db.get("incr1")]:`);
+        [db.get("incr1")].writeln;
+        writeln(`[db.get("incr2")]:`);
+        [db.get("incr2")].writeln;
+        writeln(`[db.get("incr3")]:`);
+        [db.get("incr3")].writeln;
 
         //writeln(`[db.getall("key")]:`);
         //[db.getall("key").array].writeln;
