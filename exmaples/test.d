@@ -4,7 +4,7 @@ import std.stdio;
 import std.typecons;
 import std.range;
 import drocks;
-
+import drocks.pair             : Pair;
 
 void main()
 {
@@ -42,6 +42,17 @@ void main()
         //[db.del("key2del")].writeln;
         //writeln(`[db.get("key2del")]:`);
         //[db.get("key2del")].writeln;
+
+
+        `[db.mset(["key-1","key-2","key-3",])]`.writeln;
+        [db.mset([
+            Pair("key-1", "val-1"),
+            Pair("key-2", "val-2"),
+            Pair("key-3", "val-3"),
+        ])].writeln;
+        `[db.mget(["key-1","key-2","key-3",])]`.writeln;
+        [db.mget(["key-1","key-2","key-3",])].writeln;
+
 
         
 

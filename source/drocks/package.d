@@ -7,6 +7,7 @@ import std.socket;
 import std.string;
 import std.conv;
 import std.socket;
+import std.algorithm;
 
 public import drocks.exception : ClientException;
 //import drocks.response         : Response;
@@ -55,6 +56,18 @@ public:
     // remove key from db
     bool del(string key) {
         return _req.httpPost("del", key).isOk();
+    }
+
+    // multi set values for keys
+    bool mset(Range)(Range range) {
+        range.writeln;
+        string data = range
+            .map!( (Pair x) {return x.serialize;})
+            .join("\n");
+
+        //[[_req.httpPost("mset", data).raw]].writeln;
+        return _req.httpPost("mset", data).isOk();
+        //return true;
     }
     
 
