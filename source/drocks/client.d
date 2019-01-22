@@ -69,7 +69,7 @@ public:
     }
 
     // Multi range of keys from db
-    bool mdel(Range)(auto ref Range keys)
+    bool del(Range)(auto ref Range keys)
         if(isInputRange!Range && is(ElementType!Range == string))
     {
         return _req.httpPost("mdel", keys).isOk();
@@ -116,7 +116,7 @@ public:
     }
 
     // Remove backup by IDs
-    auto backupMdel(Range)(auto ref Range ids)
+    auto backupDel(Range)(auto ref Range ids)
         if(isInputRange!Range && isIntegral!(ElementType!Range))
     {
         return _req.httpPost("backup/mdel", ids).getMultiBool();

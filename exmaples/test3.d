@@ -51,8 +51,8 @@ void main()
         `[db.get(["key-1","key-2","key-3",])]`.writeln;
         [db.get(["key-1","key-2","key-3",])].writeln;
 
-        `[db.mdel(["key-1","key-2","key-3",])]`.writeln;
-        [db.mdel(["key-1","key-2","key-3",])].writeln;
+        `[db.del(["key-1","key-2","key-3",])]`.writeln;
+        [db.del(["key-1","key-2","key-3",])].writeln;
         `[db.get(["key-1","key-2","key-3",])]`.writeln;
         [db.get(["key-1","key-2","key-3",])].writeln;
 
@@ -86,8 +86,8 @@ void main()
         writeln(`[db.backupDel(8)]:`);
         [db.backupDel(8)].writeln;
 
-        writeln(`[db.backupMdel([12, 13, 15, 2])]:`);
-        [db.backupMdel([12, 13, 15, 2]).array].writeln;
+        writeln(`[db.backupDel([12, 13, 15, 2])]:`);
+        [db.backupDel([12, 13, 15, 2]).array].writeln;
         
         //writeln(`[db.stats()]:`);
         //db.stats().writeln;
