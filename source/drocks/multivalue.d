@@ -15,16 +15,29 @@ import std.socket;
 import drocks.response         : Response;
 import drocks.pair             : Pair;
 
-struct MultiValue
+alias MultiPair  = Multi!"getPair";
+alias MultiKey   = Multi!"getKey";
+alias MultiValue = Multi!"getValue";
+
+struct Multi(string ValueType)
 {
+    ~this()
+    {
+        writeln("~Multi" ~ ValueType);
+    }
     Response  _resp;
-    //Unique!Response  _resp;
-    Pair      _cur;
+
+    alias cursor_t = typeof(mixin("Response.init." ~ ValueType ~ "()"));
+    cursor_t _cur;
+
+
     this(Response resp)
     //this(Unique!Response resp)
     {
+        writeln("Multi" ~ ValueType);
         _resp = resp;
-        _cur = Pair(_resp.getKey(), _resp.getValue());
+        _cur = mixin("_resp." ~ ValueType ~ "()");
+        
     }
 
     // The fibonacci range never ends
@@ -35,7 +48,7 @@ struct MultiValue
     }
 
     // Peak at the first element
-    Pair front() const @property
+    auto front() const @property
     {
         writeln("****************       front");
         return _cur;
@@ -45,7 +58,8 @@ struct MultiValue
     void popFront()
     {
         writeln("****************       popFront");
-        _cur = Pair(_resp.getKey(), _resp.getValue());
+        _cur = mixin("_resp." ~ ValueType ~ "()");
+        
         _cur.writeln;
     }
 

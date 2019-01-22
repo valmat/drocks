@@ -8,9 +8,10 @@ import std.string;
 import std.conv;
 import std.socket;
 import drocks.sockhandler      : SockHandler;
-import drocks.multivalue       : MultiValue;
+import drocks.multivalue       ;//: MultiValue;
 public import drocks.exception : ClientException;
 import std.algorithm: move;
+import drocks.pair             : Pair;
 
 struct Response
 {
@@ -101,15 +102,19 @@ public:
         return rez.idup;
     }
 
+    // Get key and value of response
+    Pair getPair() {
+        return Pair(this.getKey(), this.getValue());
+    }
+
    
-    //MultiValue
+    // Get multi-value iterator of response
     auto
-    getMultiValue() // const
+    getMultiPair() // const
     {
         _ownsSock = false;
-        //return MultiValue(Unique!Response(new Response(_sock)))
-        //return MultiValue(this.clone())
-        return MultiValue(this)
+        //return MultiPair(this.clone())
+        return MultiPair(this)
             //.array
             ;
 
@@ -125,13 +130,7 @@ public:
         return _sock.readLine().idup;
     }
     
-    ///**
-    //  *  Get multi-value iterator of response
-    //  *  @return MgetIterator
-    //  */
-    //public function getMultiValue() {
-    //    return new MgetIterator($this);
-    //}
+
     
     
     ///**

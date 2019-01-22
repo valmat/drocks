@@ -11,7 +11,7 @@ import std.socket;
 public import drocks.exception : ClientException;
 //import drocks.response         : Response;
 import drocks.request          : Request;
-import drocks.multivalue       : MultiValue;
+import drocks.multivalue       ;//: MultiValue;
 
 struct Client
 {
@@ -44,9 +44,7 @@ public:
     auto mget(Range)(Range range) {
         range.join("&").writeln;
         //return _req.httpGet("mget", range).raw();//
-        //return _req.httpGet("mget", range).MultiValue;
-        return _req.httpGet("mget", range).getMultiValue();
-
+        return _req.httpGet("mget", range).getMultiPair();
     }
 
     // set value for key
