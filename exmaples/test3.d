@@ -112,7 +112,7 @@ void main()
     import core.thread: Thread, seconds;
 
     writeln(`###########################################`);
-    Thread.sleep(5.seconds);
+    Thread.sleep(2.seconds);
 
     
 }
