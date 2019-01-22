@@ -53,6 +53,13 @@ void main()
         `[db.mget(["key-1","key-2","key-3",])]`.writeln;
         [db.mget(["key-1","key-2","key-3",])].writeln;
 
+        `[db.mdel(["key-1","key-2","key-3",])]`.writeln;
+        [db.mdel(["key-1","key-2","key-3",])].writeln;
+
+        `[db.mget(["key-1","key-2","key-3",])]`.writeln;
+        [db.mget(["key-1","key-2","key-3",])].writeln;
+
+
 
         
 

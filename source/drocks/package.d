@@ -59,9 +59,9 @@ public:
     }
 
     // multi set values for keys
-    bool mset(Range)(Range range) {
-        range.writeln;
-        string data = range
+    bool mset(Range)(Range pairs) {
+        pairs.writeln;
+        string data = pairs
             .map!( (Pair x) {return x.serialize;})
             .join("\n");
 
@@ -69,6 +69,17 @@ public:
         return _req.httpPost("mset", data).isOk();
         //return true;
     }
+
+    // Multi range of keys from db
+    bool mdel(Range)(Range keys) {
+        
+        string data = keys.join("\n");
+        //data.writeln;
+        //[[_req.httpPost("mdel", data).raw]].writeln;
+        return _req.httpPost("mdel", data).isOk();
+        //return true;
+    }
+
     
 
     static struct KeyExist
