@@ -72,12 +72,19 @@ public:
 
     // Multi range of keys from db
     bool mdel(Range)(Range keys) {
-        
         string data = keys.join("\n");
         //data.writeln;
         //[[_req.httpPost("mdel", data).raw]].writeln;
         return _req.httpPost("mdel", data).isOk();
         //return true;
+    }
+
+    // incriment value by key
+    bool incr(string key, int value) {
+        return _req.httpPost("incr", key ~ "\n" ~ value.to!string ).isOk();
+    }
+    bool incr(string key) {
+        return _req.httpPost("incr", key).isOk();
     }
 
     
