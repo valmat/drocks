@@ -29,9 +29,9 @@ void main()
         //[db.has("keyq").has].writeln;
         //[db.has("keyq").value].writeln;
 
-        auto a = db.get(["key1","key2","key3",]).array;
-        a.writeln;
-        [db.get(["key1","key2","key3",])].writeln;
+        //auto a = db.get(["key1","key2","key3",]).array;
+        //a.writeln;
+        //[db.get(["key1","key2","key3",])].writeln;
 
         //writeln(`[db.set("key2del", "KeyToDel")]:`);
         //[db.set("key2del", "KeyToDel")].writeln;
@@ -42,14 +42,14 @@ void main()
         //writeln(`[db.get("key2del")]:`);
         //[db.get("key2del")].writeln;
 
-        //`[db.mset(["key-1","key-2","key-3",])]`.writeln;
-        //[db.mset([
-        //    Pair("key-1", "val-1"),
-        //    Pair("key-2", "val-2"),
-        //    Pair("key-3", "val-3"),
-        //])].writeln;
-        //`[db.get(["key-1","key-2","key-3",])]`.writeln;
-        //[db.get(["key-1","key-2","key-3",])].writeln;
+        `[db.set(["key-1","key-2","key-3",])]`.writeln;
+        [db.set([
+            Pair("key-1", "val-1"),
+            Pair("key-2", "val-2"),
+            Pair("key-3", "val-3"),
+        ])].writeln;
+        `[db.get(["key-1","key-2","key-3",])]`.writeln;
+        [db.get(["key-1","key-2","key-3",])].writeln;
 
         //`[db.mdel(["key-1","key-2","key-3",])]`.writeln;
         //[db.mdel(["key-1","key-2","key-3",])].writeln;

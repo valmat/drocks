@@ -56,7 +56,7 @@ public:
     }
 
     // multi set values for keys
-    bool mset(Range)(auto ref Range pairs)
+    bool set(Range)(auto ref Range pairs)
         if(isInputRange!Range && is(ElementType!Range == Pair))
     {
         return _req.httpPost("mset", pairs).isOk();

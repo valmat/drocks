@@ -42,8 +42,8 @@ void main()
         writeln(`[db.get("key2del")]:`);
         [db.get("key2del")].writeln;
 
-        `[db.mset(["key-1","key-2","key-3",])]`.writeln;
-        [db.mset([
+        `[db.set(["key-1","key-2","key-3",])]`.writeln;
+        [db.set([
             Pair("key-1", "val-1"),
             Pair("key-2", "val-2"),
             Pair("key-3", "val-3"),
