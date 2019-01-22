@@ -23,7 +23,7 @@ private:
 public:
     this(SockHandler sockHandler)
     {
-        writeln("^^^^^^^^^^^^^^^ Response %%%%%%%%%%%%%%%%%%%%%" );
+        //writeln("^^^^^^^^^^^^^^^ Response %%%%%%%%%%%%%%%%%%%%%" );
         _ownsSock = true;
         _sock = sockHandler;
     }
@@ -46,7 +46,7 @@ public:
 
     ~this()
     {
-        writeln("~~~~~~~~~~~~~~~ ~Response %%%%%%%%%%%%%%%%%%%%%" );
+        //writeln("~~~~~~~~~~~~~~~ ~Response %%%%%%%%%%%%%%%%%%%%%" );
         //if(_ownsSock) 
         //    _sock.close();
     }
@@ -101,7 +101,7 @@ public:
             _sock.getChar(); // retrieve char '\n'
         }
         
-        writeln([rez], [val_len]);
+        //writeln([rez], [val_len]);
         //[_sock.readLine()].writeln;
 
         return rez;

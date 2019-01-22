@@ -1,13 +1,12 @@
 module drocks.request;
 
-import std.stdio;
-import std.typecons;
-import std.range;
-import std.socket;
-import std.string;
-import std.algorithm;
-import std.conv;
-import std.socket;
+//import std.typecons;
+import std.range : join;
+//import std.string;
+import std.algorithm : map;
+import std.stdio  : stderr, writeln;
+import std.socket : InternetAddress, SocketException;
+import std.conv   : to;
 static import uri = std.uri;
 
 public import drocks.exception : ClientException;
@@ -45,9 +44,9 @@ public:
             throw new ClientException(e);
         }
 
-        stderr.writeln("~~~~~~~~~~~~~~~~");
-        stderr.writeln(req);
-        stderr.writeln("~~~~~~~~~~~~~~~~");
+        //stderr.writeln("~~~~~~~~~~~~~~~~");
+        //stderr.writeln(req);
+        //stderr.writeln("~~~~~~~~~~~~~~~~");
 
         //
         // Check response status
@@ -57,7 +56,7 @@ public:
         if( status.length < expectedStatus.length ){
             throw new ClientException("Empty response");
         }
-        stderr.writeln(status);
+        //stderr.writeln(status);
         
         // Expected: status == "HTTP/1.1 200 OK"
         if( !sock.isValid() || expectedStatus != status[$-expectedStatus.length..$] ){
@@ -120,7 +119,7 @@ public:
                headsEndPost(data.length) ~
                data;
 
-        [buf].writeln;
+        //[buf].writeln;
         return this.request(buf);
     }
 
@@ -132,7 +131,7 @@ public:
                "Host:" ~ _host ~ "\r\n" ~
                headsEnd;
 
-        [buf].writeln;
+        //[buf].writeln;
         return this.request(buf);
     }
 

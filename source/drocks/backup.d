@@ -1,11 +1,11 @@
 module drocks.backup;
 import std.conv : to;
 
-import std.stdio;
-import std.typecons;
-import std.range;
-import std.string;
-import std.algorithm;
+//import std.stdio;
+//import std.typecons;
+//import std.string;
+import std.range     : array, slide;
+import std.algorithm : map;
 
 import drocks.response : Response;
 

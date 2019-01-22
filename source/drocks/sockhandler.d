@@ -1,12 +1,7 @@
 module drocks.sockhandler;
 
-import std.stdio;
-import std.typecons;
-import std.range;
-import std.socket;
-import std.string;
-import std.conv;
-import std.socket;
+//import std.stdio;
+import std.socket : TcpSocket, InternetAddress;
 
 public import drocks.exception : ClientException;
 
@@ -21,14 +16,14 @@ private:
 public:
     this(TcpSocket sock, char[] buf)
     {
-        "Open sock1|||||".writeln; 
+        //"Open sock1|||||".writeln; 
         _opened = true;
         _sock     = sock;
         _line_buf = buf;
     }
     this(char[] buf)
     {
-        "Open sock2|||||".writeln;
+        //"Open sock2|||||".writeln;
         _opened = false;
         _sock     = new TcpSocket();
         _line_buf = buf;
@@ -36,7 +31,7 @@ public:
     //@disable this ();
     ~this()
     {
-        "close sock ~this".writeln;
+        //"close sock ~this".writeln;
         this.close();
     }
 
@@ -47,9 +42,9 @@ public:
     
     void close()
     {
-        "close sock________".writeln;
+        //"close sock________".writeln;
         if(_opened) {
-            "close sock........".writeln;
+            //"close sock........".writeln;
             //_sock.close();
             _opened = false;
         }

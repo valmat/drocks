@@ -4,7 +4,6 @@ import std.stdio;
 import std.typecons;
 import std.range;
 import drocks;
-import drocks.pair             : Pair;
 
 void main()
 {
@@ -25,10 +24,10 @@ void main()
         //writeln(`[db.get("keyq")]:`);
         //[db.get("keyq")].writeln;
 
-        //writeln(`[db.exist("keyq")]:`);
-        //[db.exist("keyq")].writeln;
-        //[db.exist("keyq").exist].writeln;
-        //[db.exist("keyq").value].writeln;
+        //writeln(`[db.has("keyq")]:`);
+        //[db.has("keyq")].writeln;
+        //[db.has("keyq").has].writeln;
+        //[db.has("keyq").value].writeln;
 
         //auto a = db.mget(["key1","key2","key3",]).array;
         //a.writeln;
@@ -43,7 +42,6 @@ void main()
         //writeln(`[db.get("key2del")]:`);
         //[db.get("key2del")].writeln;
 
-
         //`[db.mset(["key-1","key-2","key-3",])]`.writeln;
         //[db.mset([
         //    Pair("key-1", "val-1"),
@@ -55,7 +53,6 @@ void main()
 
         //`[db.mdel(["key-1","key-2","key-3",])]`.writeln;
         //[db.mdel(["key-1","key-2","key-3",])].writeln;
-
         //`[db.mget(["key-1","key-2","key-3",])]`.writeln;
         //[db.mget(["key-1","key-2","key-3",])].writeln;
 
@@ -86,18 +83,16 @@ void main()
         ////db.backupInfo().writeln;
         //[db.backupInfo().length].writeln;
 
-        //writeln(`[db.backupDel(5)]:`);
-        //[db.backupDel(5)].writeln;
+        //writeln(`[db.backupDel(8)]:`);
+        //[db.backupDel(8)].writeln;
 
-        //writeln(`[db.backupMdel([12, 13, 15])]:`);
-        //[db.backupMdel([12, 13, 15]).array].writeln;
+        //writeln(`[db.backupMdel([12, 13, 15, 2])]:`);
+        //[db.backupMdel([12, 13, 15, 2]).array].writeln;
         
-        writeln(`[db.stats()]:`);
-        db.stats().writeln;
+        //writeln(`[db.stats()]:`);
+        //db.stats().writeln;
 
         
-
-
 
 
 
