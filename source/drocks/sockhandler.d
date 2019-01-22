@@ -11,27 +11,35 @@ import std.socket;
 public import drocks.exception : ClientException;
 
 class SockHandler
+//struct SockHandler
 {
 private:
     TcpSocket _sock;
     char[] _line_buf;
-    bool   _opened = true;
+    bool   _opened = false;
     bool   _valid = true;
 
 public:
     this(TcpSocket sock, char[] buf)
     {
+        "Open sock1|||||".writeln; 
         _opened = true;
         _sock     = sock;
         _line_buf = buf;
     }
     this(char[] buf)
     {
+        "Open sock2|||||".writeln;
         _opened = false;
         _sock     = new TcpSocket();
         _line_buf = buf;
     }
-    @disable this ();
+    //@disable this ();
+    ~this()
+    {
+        "close sock ~this".writeln;
+        this.close();
+    }
 
     bool isValid() const
     {
@@ -40,8 +48,10 @@ public:
     
     void close()
     {
-        if(isValid()) {
-            _sock.close();
+        "close sock________".writeln;
+        if(_opened && _valid) {
+            "close sock........".writeln;
+            //_sock.close();
             _opened = false;
         }
     }

@@ -10,12 +10,13 @@ import std.socket;
 import drocks.sockhandler      : SockHandler;
 import drocks.multivalue       : MultiValue;
 public import drocks.exception : ClientException;
-
+import std.algorithm: move;
 
 struct Response
 {
 private:
-    SockHandler _sock;
+    //RefCounted!(scoped!SockHandler) _sock;
+    typeof(refCounted!(scoped!SockHandler)) _sock;
     // Владеет ли текущий экземпляр сокетом
     bool _ownsSock = true;
 
@@ -23,29 +24,31 @@ public:
     this(SockHandler sockHandler)
     {
         writeln("^^^^^^^^^^^^^^^ Response %%%%%%%%%%%%%%%%%%%%%" );
-        _sock = sockHandler;
+        _ownsSock = true;
+        _sock = refCounted(scoped(sockHandler));
     }
     @disable this ();
 
-    //@disable
+    //@disable this(this);
     //this(ref Response rhs)
-    this(this)
-    {
-        this._sock = _sock;
-        _ownsSock = false;
-        //this._ownsSock = true;
-    }
+    //this(this)
+    //{
+    //    this._sock = _sock;
+    //    _ownsSock = false;
+    //    //this._ownsSock = true;
+    //}
 
-    Response clone()
-    {
-        return Response(_sock);
-    }
+    //Response clone()
+    //{
+    //    _ownsSock = false;
+    //    return Response(_sock);
+    //}
 
     ~this()
     {
         writeln("~~~~~~~~~~~~~~~ ~Response %%%%%%%%%%%%%%%%%%%%%" );
-        if(_ownsSock) 
-            _sock.close();
+        //if(_ownsSock) 
+        //    _sock.close();
     }
 
     void close()
@@ -80,23 +83,18 @@ public:
         if(!_sock.isValid) {
             return null;
         }
-        
-auto qq = _sock.readLine();
-writeln("qq : ", [qq]);
 
+        auto val_len_str = _sock.readLine();
+        if(!val_len_str.length) {
+            return null;
+        }
 
-        auto val_len = qq.to!uint16_t;
-        //auto val_len = _sock.readLine().to!uint16_t;
-
+        auto val_len = val_len_str.to!uint16_t;
         if( !val_len || !_sock.isValid ) {
             return "";
         }
 
         auto rez = val_len ? _sock.read(val_len) : "";
-writeln("rez : ", [rez]);
-        // skip '\n'
-        //_sock.readLine();
-        //return $rez;
         
         writeln([rez], [val_len]);
         //[_sock.readLine()].writeln;
@@ -109,9 +107,11 @@ writeln("rez : ", [rez]);
     auto
     getMultiValue() // const
     {
+        _ownsSock = false;
+        //return MultiValue(Unique!Response(new Response(_sock)))
         //return MultiValue(this.clone())
         return MultiValue(this)
-            .array
+            //.array
             ;
 
     }

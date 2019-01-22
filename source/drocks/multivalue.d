@@ -18,8 +18,10 @@ import drocks.pair             : Pair;
 struct MultiValue
 {
     Response  _resp;
+    //Unique!Response  _resp;
     Pair      _cur;
     this(Response resp)
+    //this(Unique!Response resp)
     {
         _resp = resp;
         _cur = Pair(_resp.getKey(), _resp.getValue());

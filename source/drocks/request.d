@@ -35,6 +35,7 @@ public:
     // @param string request
     auto request(string req) {
         auto sock = new SockHandler(_line_buf);
+        //auto sock = SockHandler(_line_buf);
         //scope(exit) sock.close();
 
         try {
@@ -72,11 +73,13 @@ public:
         //[receiveLine(sock, 5000)].writeln;
 
 
-        return Response(sock);
+        return Response(sock.move);
+        //return Unique!Response(new Response(sock));
     }
 
     // GET request
-    Response httpGet(string path)
+    //Response
+    auto httpGet(string path)
     {
         string buf;
         buf  = "GET /" ~ path  ~ " HTTP/1.1\r\n" ~
@@ -86,7 +89,8 @@ public:
     }
 
     // GET request
-    Response httpGet(string path, string data)
+    //Response
+    auto httpGet(string path, string data)
     {
         string buf;
         buf  = "GET /" ~ path  ~ "?" ~ uri.encode(data) ~ " HTTP/1.1\r\n" ~
@@ -95,7 +99,8 @@ public:
         return this.request(buf);
     }
 
-    Response httpGet(Range)(string path, Range range)
+    //Response
+    auto httpGet(Range)(string path, Range range)
     {
         static import uri = std.uri;
         string buf;
@@ -111,7 +116,8 @@ public:
     }
 
     // POST request
-    Response httpPost(string path, string data) {
+    //Response
+    auto httpPost(string path, string data) {
         string buf;
         buf  = "POST /" ~ path ~ " HTTP/1.1\r\n" ~
                "Host:" ~ _host ~ "\r\n" ~
@@ -123,7 +129,8 @@ public:
     }
 
     // POST request
-    Response httpPost(string path) {
+    //Response
+    auto httpPost(string path) {
         string buf;
         buf  = "POST /" ~ path ~ " HTTP/1.1\r\n" ~
                "Host:" ~ _host ~ "\r\n" ~
