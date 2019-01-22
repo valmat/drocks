@@ -80,14 +80,17 @@ void main()
 
         //writeln(`[db.backup()]:`);
         //[db.backup()].writeln;
-        writeln(`[db.backupInfo()]:`);
-        [db.backupInfo().array].writeln;
-        //db.backupInfo().writeln;
-        [db.backupInfo().length].writeln;
 
+        //writeln(`[db.backupInfo()]:`);
+        //[db.backupInfo().array].writeln;
+        ////db.backupInfo().writeln;
+        //[db.backupInfo().length].writeln;
 
-        writeln(`[db.backupDel(5)]:`);
-        [db.backupDel(5)].writeln;
+        //writeln(`[db.backupDel(5)]:`);
+        //[db.backupDel(5)].writeln;
+
+        writeln(`[db.backupMdel([12, 13, 15])]:`);
+        [db.backupMdel([12, 13, 15]).array].writeln;
 
 
 

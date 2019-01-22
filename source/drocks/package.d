@@ -120,6 +120,18 @@ public:
         return _req.httpPost("backup/del", id.to!string).isOk;
     }
 
+    // Remove backup by ID
+    auto backupMdel(Range)(Range ids) {
+        string data = ids
+            .map!"a.to!string"
+            .join('\n');
+
+        return _req.httpPost("backup/mdel", data)
+            .getMultiKey
+            .map!`a == "OK"`;
+    }
+
+
     
 
     static struct KeyExist
