@@ -86,6 +86,10 @@ void main()
         [db.backupInfo().length].writeln;
 
 
+        writeln(`[db.backupDel(5)]:`);
+        [db.backupDel(5)].writeln;
+
+
 
 
 
