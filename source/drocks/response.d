@@ -16,43 +16,49 @@ import drocks.pair             : Pair;
 struct Response
 {
 private:
-    SockHandler _sock;
+    SockHandler _sock = null;
     // Владеет ли текущий экземпляр сокетом
     bool _ownsSock = true;
 
 public:
     this(SockHandler sockHandler)
     {
-        //writeln("^^^^^^^^^^^^^^^ Response %%%%%%%%%%%%%%%%%%%%%" );
+        writeln("^^^^^^^^^^^^^^^ Response %%%%%%%%%%%%%%%%%%%%%" );
         _ownsSock = true;
         _sock = sockHandler;
     }
-    //@disable this ();
+    @disable this ();
 
     //@disable this(this);
     //this(ref Response rhs)
-    //this(this)
-    //{
-    //    this._sock = _sock;
-    //    _ownsSock = false;
-    //    //this._ownsSock = true;
-    //}
+    this(this)
+    {
+        writeln("-------------- Response this(this)" );
+        //_ownsSock = false;
+        //this._ownsSock = true;
+    }
 
-    //Response clone()
-    //{
-    //    _ownsSock = false;
-    //    return Response(_sock);
-    //}
+    Response clone()
+    {
+        _ownsSock = false;
+        return Response(_sock);
+    }
 
     ~this()
     {
-        //writeln("~~~~~~~~~~~~~~~ ~Response %%%%%%%%%%%%%%%%%%%%%" );
-        //if(_ownsSock) 
-        //    _sock.close();
+        writeln("~~~~~~~~~~~~~~~ ~Response %%%%%%%%%%%%%%%%%%%%%" );
+        //[(_sock !is null), _ownsSock].writeln;
+        if((_sock !is null) && _ownsSock) {
+            //[&_sock].writeln;
+            //_ownsSock = false;
+            //_sock.close();
+            writeln("~~~~~~~~~~~~~~~ \t\t close Response" );
+        }
     }
 
     void close()
     {
+        writeln("~~~~~~~~~~~~~~~ ~Response           void close() ");
         _sock.close();
     }
     
@@ -114,12 +120,14 @@ public:
 
    
     // Get multi-value iterator of response
-    auto
-    getMultiPair() // const
+    auto getMultiPair()
     {
         _ownsSock = false;
         //return MultiPair(this.clone())
-        return MultiPair(this)
+        //return MultiPair(this)
+        return refRange(new MultiPair(this.clone()))
+        //return refRange(new MultiPair(this))
+
             //.array
             ;
     }
@@ -132,7 +140,6 @@ public:
         return MultiKey(this)
             //.array
             ;
-
     }
 
 

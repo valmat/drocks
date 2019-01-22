@@ -1,6 +1,6 @@
 module drocks.sockhandler;
 
-//import std.stdio;
+import std.stdio;
 import std.socket : TcpSocket, InternetAddress, recv;
 //import std.socket : recv, SocketFlags;
 //import std.socket;
@@ -23,22 +23,20 @@ private:
 public:
     this(TcpSocket sock)
     {
-        //"Open sock1|||||".writeln; 
+        "Open sock1|||||".writeln; 
         _opened = true;
         _sock     = sock;
-        //_line_buf = buf;
     }
     this()
     {
-        //"Open sock2|||||".writeln;
+        "Open sock2|||||".writeln;
         _opened = false;
         _sock     = new TcpSocket();
-        //_line_buf = buf;
     }
 
     ~this()
     {
-        //"close sock ~this".writeln;
+        "close sock ~this".writeln;
         this.close();
     }
 
@@ -51,9 +49,9 @@ public:
     {
         //"close sock________".writeln;
         if(_opened) {
-            //"close sock........".writeln;
-            //_sock.close();
-            _opened = false;
+            "\t\t\t\t\t\t\tclose sock__........".writeln;
+            _sock.close();
+            //_opened = false;
         }
     }
 

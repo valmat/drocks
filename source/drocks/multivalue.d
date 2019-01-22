@@ -5,7 +5,7 @@ import std.stdio;
 //import std.range;
 //import std.socket;
 //import std.string;
-//import std.algorithm;
+import std.algorithm;
 //import std.conv;
 //import std.socket;
 
@@ -23,8 +23,13 @@ struct Multi(string ValueType)
 {
     ~this()
     {
-        //writeln("~Multi" ~ ValueType);
+        writeln("\t\t\t\t\t  ~Multi" ~ ValueType);
     }
+    this(this)
+    {
+        writeln("\t\t\t\t\t  this(this) Multi" ~ ValueType);
+    }
+
     Response  _resp;
 
     alias cursor_t = typeof(mixin("Response.init." ~ ValueType ~ "()"));
@@ -33,8 +38,8 @@ struct Multi(string ValueType)
 
     this(Response resp)
     {
-        //writeln("Multi" ~ ValueType);
-        _resp = resp;
+        writeln("\t\t\t\t\t  Multi" ~ ValueType);
+        _resp = resp.move;
         _cur = mixin("_resp." ~ ValueType ~ "()");
     }
 
