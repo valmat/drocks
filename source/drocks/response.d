@@ -15,8 +15,7 @@ import std.algorithm: move;
 struct Response
 {
 private:
-    //RefCounted!(scoped!SockHandler) _sock;
-    typeof(refCounted!(scoped!SockHandler)) _sock;
+    SockHandler _sock;
     // Владеет ли текущий экземпляр сокетом
     bool _ownsSock = true;
 
@@ -25,9 +24,9 @@ public:
     {
         writeln("^^^^^^^^^^^^^^^ Response %%%%%%%%%%%%%%%%%%%%%" );
         _ownsSock = true;
-        _sock = refCounted(scoped(sockHandler));
+        _sock = sockHandler;
     }
-    @disable this ();
+    //@disable this ();
 
     //@disable this(this);
     //this(ref Response rhs)

@@ -53,28 +53,24 @@ public:
         // Check response status
         //
         auto status = sock.receiveHeader();
-        if( status.length < 6 ){
+        enum string expectedStatus = "200 OK";
+        if( status.length < expectedStatus.length ){
             throw new ClientException("Empty response");
         }
         stderr.writeln(status);
         
         // Expected: status == "HTTP/1.1 200 OK"
-        if( !sock.isValid() || "200 OK" != status[$-6..$] ){
+        if( !sock.isValid() || expectedStatus != status[$-expectedStatus.length..$] ){
             throw new ClientException("Status error: " ~ status.idup);
         }
 
         // skip headers
         while (sock.receiveHeader().length) {}
-
-
         
-        //return new Response($sock);
         //[receiveLine(sock)].writeln;
         //[receiveLine(sock, 5000)].writeln;
 
-
-        return Response(sock.move);
-        //return Unique!Response(new Response(sock));
+        return Response(sock);
     }
 
     // GET request

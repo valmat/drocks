@@ -30,8 +30,10 @@ void main()
         //[db.exist("keyq").exist].writeln;
         //[db.exist("keyq").value].writeln;
 
-        //db.mget(["key1","key2","key3",]);
-        [db.mget(["key1","key2","key3",])].writeln;
+        auto a = db.mget(["key1","key2","key3",]).array;
+        a.writeln;
+
+        //[db.mget(["key1","key2","key3",])].writeln;
 
         
 

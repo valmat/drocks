@@ -11,7 +11,6 @@ import std.socket;
 public import drocks.exception : ClientException;
 
 class SockHandler
-//struct SockHandler
 {
 private:
     TcpSocket _sock;
@@ -49,7 +48,7 @@ public:
     void close()
     {
         "close sock________".writeln;
-        if(_opened && _valid) {
+        if(_opened) {
             "close sock........".writeln;
             //_sock.close();
             _opened = false;
@@ -80,9 +79,8 @@ public:
             _line_buf ~= c;
         }
 
-
         // Receive char '\n'
-        if(_sock.isAlive()) {
+        if(isValid()) {
             //_sock.receive(buf);
             getChar();
         }
