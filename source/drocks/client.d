@@ -19,8 +19,8 @@ import drocks.backup    : BackupUnitsRange;
 struct Client
 {
 private:
-    // Requestes handler
     Request _req;
+
 public:
     this(string host, ushort port)
     {
@@ -88,10 +88,6 @@ public:
         return _req.httpPost("incr", key).isOk();
     }
 
-    /**
-      *  
-      *  @return MgetIterator
-      */
     // multi get all key-value pairs (by key-prefix)
     auto getall(string prefix) {
         //return _req.httpGet("prefit", prefix).raw();
@@ -153,11 +149,34 @@ public:
             KeyExist(rez) :
             KeyExist(rez, resp.getValue());
     }
-    
-
 }
 
+mixin template ExtendClient()
+{
+private:
+    alias __ThisType = typeof(this);
+    Client _db;
+public:
+    alias _db this;
 
+    this(string host, ushort port)
+    {
+        _db = Client(host, port);
+    }
+    //@disable this ();
+
+    static __ThisType createDefault()
+    {
+        __ThisType rez = __ThisType.init;
+        rez._db = Client.createDefault();
+        return rez;
+    }
+
+    auto opDispatch(string methodName, Args...)(Args args) {
+        writeln("called ", methodName);
+        return mixin("_db." ~ methodName)(args);
+    }
+}
 
 // test:
 // cd source
