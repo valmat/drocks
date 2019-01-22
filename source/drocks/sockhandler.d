@@ -141,7 +141,7 @@ public:
         return rez;
     }
 
-    private
+    //private
     //ReceivedChar
     char getChar()
     {

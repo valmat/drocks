@@ -62,19 +62,27 @@ void main()
         //`[db.mget(["key-1","key-2","key-3",])]`.writeln;
         //[db.mget(["key-1","key-2","key-3",])].writeln;
 
-        `[db.incr]`.writeln;
-        [db.incr("incr1"     )].writeln;
-        [db.incr("incr2",   5)].writeln;
-        [db.incr("incr3", -11)].writeln;
-        writeln(`[db.get("incr1")]:`);
-        [db.get("incr1")].writeln;
-        writeln(`[db.get("incr2")]:`);
-        [db.get("incr2")].writeln;
-        writeln(`[db.get("incr3")]:`);
-        [db.get("incr3")].writeln;
+        //`[db.incr]`.writeln;
+        //[db.incr("incr1"     )].writeln;
+        //[db.incr("incr2",   5)].writeln;
+        //[db.incr("incr3", -11)].writeln;
+        //writeln(`[db.get("incr1")]:`);
+        //[db.get("incr1")].writeln;
+        //writeln(`[db.get("incr2")]:`);
+        //[db.get("incr2")].writeln;
+        //writeln(`[db.get("incr3")]:`);
+        //[db.get("incr3")].writeln;
+
+        //writeln(`[db.getall("key")]:`);
+        //[db.getall("key").array].writeln;
+        writeln(`[db.getall()]:`);
+        [db.getall().array].writeln;
 
 
+        //writeln(`[db.mget(["empty", "incr1"]).array]:`);
+        //[db.mget(["empty", "incr1"]).array].writeln;
 
+        
 
 
         

@@ -95,7 +95,11 @@ public:
         }
 
 
+        //auto rez = val_len ? _sock.read(val_len).idup : "";
         auto rez = val_len ? _sock.read(val_len).idup : "";
+        if(!val_len) {
+            _sock.getChar(); // retrieve char '\n'
+        }
         
         writeln([rez], [val_len]);
         //[_sock.readLine()].writeln;

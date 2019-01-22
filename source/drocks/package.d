@@ -87,6 +87,22 @@ public:
         return _req.httpPost("incr", key).isOk();
     }
 
+    /**
+      *  
+      *  @return MgetIterator
+      */
+    // multi get all key-value pairs (by key-prefix)
+    auto getall(string prefix) {
+        //return _req.httpGet("prefit", prefix).raw();
+        return _req.httpGet("prefit", prefix).getMultiPair();
+    }
+
+    // multi get all key-value pairs
+    auto getall() {
+        //return _req.httpGet("tail").raw();
+        return _req.httpGet("tail").getMultiPair();
+    }
+
     
 
     static struct KeyExist
