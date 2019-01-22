@@ -109,10 +109,9 @@ void main()
         writeln([e.msg, e.file], e.line);
     }
 
-    import core.thread: Thread, seconds;
-
-    writeln(`###########################################`);
-    Thread.sleep(2.seconds);
+    //import core.thread: Thread, seconds;
+    //writeln(`###########################################`);
+    //Thread.sleep(2.seconds);
 
     
 }
