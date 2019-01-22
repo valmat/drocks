@@ -122,6 +122,16 @@ public:
         return MultiPair(this)
             //.array
             ;
+    }
+
+    auto
+    getMultiKey() // const
+    {
+        _ownsSock = false;
+        //return MultiPair(this.clone())
+        return MultiKey(this)
+            //.array
+            ;
 
     }
 

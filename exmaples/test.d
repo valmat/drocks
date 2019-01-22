@@ -78,8 +78,13 @@ void main()
         //writeln(`[db.getall()]:`);
         //[db.getall().array].writeln;
 
-        writeln(`[db.backup()]:`);
-        [db.backup()].writeln;
+        //writeln(`[db.backup()]:`);
+        //[db.backup()].writeln;
+        writeln(`[db.backupInfo()]:`);
+        [db.backupInfo().array].writeln;
+        //db.backupInfo().writeln;
+
+
 
 
 
