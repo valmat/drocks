@@ -19,7 +19,7 @@ struct Request
 {
 private:
     InternetAddress _addr;
-    char[] _line_buf;
+    //char[] _line_buf;
     string _host;
 
 public:
@@ -27,13 +27,14 @@ public:
     {
         _host = host;
         _addr = new InternetAddress(host, port);
-        _line_buf.reserve(128);
+        //_line_buf.reserve(128);
     }
     @disable this ();
 
     // @param string request
     auto request(string req) {
-        auto sock = new SockHandler(_line_buf);
+        //auto sock = new SockHandler(_line_buf);
+        auto sock = new SockHandler();
         //auto sock = SockHandler(_line_buf);
         //scope(exit) sock.close();
 

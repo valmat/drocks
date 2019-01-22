@@ -1,34 +1,41 @@
 module drocks.sockhandler;
 
 //import std.stdio;
-import std.socket : TcpSocket, InternetAddress;
+import std.socket : TcpSocket, InternetAddress, recv;
+//import std.socket : recv, SocketFlags;
+//import std.socket;
 
 public import drocks.exception : ClientException;
+
+// Define thread local static buffer
+private static char[] _line_buf;
+static this() {
+    _line_buf.reserve(128);
+}
 
 class SockHandler
 {
 private:
     TcpSocket _sock;
-    char[] _line_buf;
     bool   _opened = false;
     bool   _valid = true;
 
 public:
-    this(TcpSocket sock, char[] buf)
+    this(TcpSocket sock)
     {
         //"Open sock1|||||".writeln; 
         _opened = true;
         _sock     = sock;
-        _line_buf = buf;
+        //_line_buf = buf;
     }
-    this(char[] buf)
+    this()
     {
         //"Open sock2|||||".writeln;
         _opened = false;
         _sock     = new TcpSocket();
-        _line_buf = buf;
+        //_line_buf = buf;
     }
-    //@disable this ();
+
     ~this()
     {
         //"close sock ~this".writeln;
@@ -61,15 +68,10 @@ public:
     }
 
     // Receives a Header from socket
-    char[] receiveHeader() //const
+    char[] receiveHeader()
     {
         _line_buf.length = 0;
-        //char[1] buf;
         // Receive behind "\r\n"
-        //while(_sock.isAlive() && _sock.receive(buf) && '\r' != buf[0]) {
-        //    _line_buf ~= buf;
-        //}
-        //
         for(auto c = getChar(); isValid() && '\r' != c; c = getChar()) {
             _line_buf ~= c;
         }
@@ -86,11 +88,7 @@ public:
     char[] readLine()
     {
         _line_buf.length = 0;
-        //char[1] buf;
         // Receive behind '\n'
-        //while(_sock.isAlive() && _sock.receive(buf) && '\n' != buf[0]) {
-        //    _line_buf ~= buf;
-        //}
         for(auto c = getChar(); isValid() && '\n' != c; c = getChar()) {
             _line_buf ~= c;
         }
@@ -102,11 +100,6 @@ public:
     char[] read(size_t num)
     {
         _line_buf.length = 0;
-        //char[1] buf;
-        //for(size_t i = 0; i < num && _sock.isAlive() &&  _sock.receive(buf); ++i) {
-        //    _line_buf ~= buf;
-        //}
-        
         size_t i = 0;
         for(auto c = getChar(); i < num && isValid(); ++i, c = getChar()) {
             _line_buf ~= c;
@@ -115,19 +108,12 @@ public:
     }
 
     // Receives all data from socket
-    string readAll() /*const*/
+    string readAll()
     {
         _line_buf.length = 0;
-        //char[1] buf;
         string rez = "";
 
-        //bool valid  = true;
         while(isValid()) {
-            //valid = _sock.isAlive() && _sock.receive(buf);
-            //while(valid) {
-            //    _line_buf ~= buf;
-            //    valid = _sock.isAlive() && _sock.receive(buf);
-            //}
             for(auto c = getChar(); isValid(); c = getChar()) {
                 _line_buf ~= c;
             }
@@ -136,28 +122,12 @@ public:
         return rez;
     }
 
-    //private
-    //ReceivedChar
     char getChar()
     {
         char[1] buf;
-        _valid  = _sock.receive(buf) != 0;
-        //return ReceivedChar(_valid, buf[0]);
+        _valid  = _sock.receive(buf) != 0UL;
+        //_valid  = recv(_sock.handle(), buf.ptr, 1, cast(int) SocketFlags.NONE) != 0UL;
         return buf[0];
     }
 
-
 }
-
-//private struct ReceivedChar
-//{
-//    bool valid;
-//    char value;
-//    alias value this;
-//}
-
-
-
-// test:
-// cd source
-// rdmd -unittest -main --force drocks/package

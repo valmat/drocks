@@ -29,8 +29,8 @@ void main()
         //[db.has("keyq").has].writeln;
         //[db.has("keyq").value].writeln;
 
-        //auto a = db.mget(["key1","key2","key3",]).array;
-        //a.writeln;
+        auto a = db.mget(["key1","key2","key3",]).array;
+        a.writeln;
         //[db.mget(["key1","key2","key3",])].writeln;
 
         //writeln(`[db.set("key2del", "KeyToDel")]:`);
