@@ -131,6 +131,11 @@ public:
             .map!`a == "OK"`;
     }
 
+    // retrive server statistics
+    auto stats() {
+        return _req.httpPost("stats").raw;
+    }
+
 
     
 

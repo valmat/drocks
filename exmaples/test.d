@@ -89,8 +89,13 @@ void main()
         //writeln(`[db.backupDel(5)]:`);
         //[db.backupDel(5)].writeln;
 
-        writeln(`[db.backupMdel([12, 13, 15])]:`);
-        [db.backupMdel([12, 13, 15]).array].writeln;
+        //writeln(`[db.backupMdel([12, 13, 15])]:`);
+        //[db.backupMdel([12, 13, 15]).array].writeln;
+        
+        writeln(`[db.stats()]:`);
+        db.stats().writeln;
+
+        
 
 
 
