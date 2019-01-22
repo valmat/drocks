@@ -100,16 +100,11 @@ public:
             return null;
         }
 
-
-        //auto rez = val_len ? _sock.read(val_len).idup : "";
         auto rez = val_len ? _sock.read(val_len).idup : "";
         if(!val_len) {
             _sock.getChar(); // retrieve char '\n'
         }
         
-        //writeln([rez], [val_len]);
-        //[_sock.readLine()].writeln;
-
         return rez;
     }
 
@@ -123,23 +118,24 @@ public:
     auto getMultiPair()
     {
         _ownsSock = false;
-        //return MultiPair(this.clone())
-        //return MultiPair(this)
-        return refRange(new MultiPair(this.clone()))
-        //return refRange(new MultiPair(this))
-
-            //.array
-            ;
+        //return MultiPair(this.clone());
+        return MultiPair(this);
+        //return refRange(new MultiPair(this.clone()));
+        //return refRange(new MultiPair(this));
     }
 
     auto
     getMultiKey() // const
     {
-        _ownsSock = false;
-        //return MultiPair(this.clone())
-        return MultiKey(this)
-            //.array
-            ;
+        //return refRange(new MultiKey(this));
+        return MultiKey(this);
+    }
+
+    auto
+    getMultiValue() // const
+    {
+        //return refRange(new MultiValue(this));
+        return MultiValue(this);
     }
 
 

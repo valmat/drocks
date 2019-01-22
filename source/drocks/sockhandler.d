@@ -123,8 +123,9 @@ public:
     char getChar()
     {
         char[1] buf;
-        _valid  = _sock.receive(buf) != 0UL;
+        _valid  = (_sock.receive(buf) != 0UL);
         //_valid  = recv(_sock.handle(), buf.ptr, 1, cast(int) SocketFlags.NONE) != 0UL;
+        if(!_valid) close();
         return buf[0];
     }
 
