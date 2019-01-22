@@ -1,10 +1,9 @@
 module drocks.client;
 
-//import std.stdio   : stderr, writeln;
-import std.range     : join, isInputRange, ElementType;
-import std.traits    : isIntegral;
-import std.conv      : to;
-import std.algorithm : map;
+//import std.stdio : stderr, writeln;
+import std.range   : join, isInputRange, ElementType;
+import std.traits  : isIntegral;
+import std.conv    : to;
 
 import drocks.exception : ClientException;
 import drocks.request   : Request;
@@ -120,10 +119,7 @@ public:
     auto backupMdel(Range)(auto ref Range ids)
         if(isInputRange!Range && isIntegral!(ElementType!Range))
     {
-        return _req
-            .httpPost("backup/mdel", ids)
-            .getMultiKey
-            .map!`a == "OK"`;
+        return _req.httpPost("backup/mdel", ids).getMultiBool();
     }
 
     // retrive server statistics

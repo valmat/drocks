@@ -1,6 +1,7 @@
 module drocks.response;
 
 import std.conv           : to;
+import std.algorithm      : map;
 import drocks.sockhandler : SockHandler;
 import drocks.exception   : ClientException;
 import drocks.pair        : Pair;
@@ -93,6 +94,11 @@ public:
     {
         //return refRange(new MultiValue(this));
         return MultiValue(this);
+    }
+
+    auto getMultiBool()
+    {
+        return this.getMultiKey().map!`a == "OK"`;
     }
 
     // Get single value of response
