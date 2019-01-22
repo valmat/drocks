@@ -33,6 +33,11 @@ public:
         return Client("localhost", 5533);
     }
 
+    ref Request request()
+    {
+        return _req;
+    }
+
     // get value by key
     string get(string key) {
         return _req.httpGet("get", key).getValue();
@@ -81,7 +86,7 @@ public:
     }
 
     // incriment value by key
-    bool incr(string key, int value) {
+    bool incr(string key, long value) {
         return _req.httpPost("incr", key ~ "\n" ~ value.to!string ).isOk();
     }
     bool incr(string key) {
@@ -130,10 +135,7 @@ public:
     // retrive server statistics
     auto stats() {
         return _req.httpPost("stats").raw;
-    }
-
-
-    
+    }   
 
     static struct KeyExist
     {
