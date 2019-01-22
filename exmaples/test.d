@@ -19,9 +19,9 @@ void main()
         //[db.get("key3")].writeln;
 
         //writeln(`[db.set("key q", "QQQ QQQ")]:`);
-        //[db.set("key q", "QQQ QQQ")].writeln;
+        //[db.set("keyq", "QQQ QQQ")].writeln;
         //writeln(`[db.set("keyq", "QQQqqqQQQ")]:`);
-        //[db.set("key q", "QQQqqqQQQ")].writeln;
+        //[db.set("keyq", "QQQqqqQQQ")].writeln;
         //writeln(`[db.get("keyq")]:`);
         //[db.get("keyq")].writeln;
 
@@ -30,10 +30,18 @@ void main()
         //[db.exist("keyq").exist].writeln;
         //[db.exist("keyq").value].writeln;
 
-        auto a = db.mget(["key1","key2","key3",]).array;
-        a.writeln;
-
+        //auto a = db.mget(["key1","key2","key3",]).array;
+        //a.writeln;
         //[db.mget(["key1","key2","key3",])].writeln;
+
+        //writeln(`[db.set("key2del", "KeyToDel")]:`);
+        //[db.set("key2del", "KeyToDel")].writeln;
+        //writeln(`[db.get("key2del")]:`);
+        //[db.get("key2del")].writeln;
+        //writeln(`[db.del("key2del")]:`);
+        //[db.del("key2del")].writeln;
+        //writeln(`[db.get("key2del")]:`);
+        //[db.get("key2del")].writeln;
 
         
 

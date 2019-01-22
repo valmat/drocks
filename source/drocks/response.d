@@ -89,17 +89,18 @@ public:
             return null;
         }
 
-        auto val_len = val_len_str.to!uint16_t;
-        if( !val_len || !_sock.isValid ) {
-            return "";
+        auto val_len = val_len_str.to!int;
+        if(val_len < 0 || !_sock.isValid) {
+            return null;
         }
 
-        auto rez = val_len ? _sock.read(val_len) : "";
+
+        auto rez = val_len ? _sock.read(val_len).idup : "";
         
         writeln([rez], [val_len]);
         //[_sock.readLine()].writeln;
 
-        return rez.idup;
+        return rez;
     }
 
     // Get key and value of response
