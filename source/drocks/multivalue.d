@@ -40,26 +40,20 @@ struct Multi(string ValueType)
         
     }
 
-    // The fibonacci range never ends
     bool empty() const
     {
         writeln("****************       empty ", !_resp.isValid());
         return !_resp.isValid();
     }
-
-    // Peak at the first element
     auto front() const @property
     {
         writeln("****************       front");
         return _cur;
     }
-
-    // Remove the first element
     void popFront()
     {
         writeln("****************       popFront");
         _cur = mixin("_resp." ~ ValueType ~ "()");
-        
         _cur.writeln;
     }
 

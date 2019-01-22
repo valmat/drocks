@@ -83,6 +83,7 @@ void main()
         writeln(`[db.backupInfo()]:`);
         [db.backupInfo().array].writeln;
         //db.backupInfo().writeln;
+        [db.backupInfo().length].writeln;
 
 
 

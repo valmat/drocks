@@ -14,7 +14,7 @@ public import drocks.exception : ClientException;
 import drocks.request          : Request;
 import drocks.pair             : Pair;
 import drocks.multivalue       ;//: MultiValue;
-import drocks.backupunit;
+import drocks.backup;
 
 struct Client
 {
@@ -114,17 +114,18 @@ public:
     auto backupInfo() {
         //return new BackupIterator( $this->httpPost('backup/info') );
         //return _req.httpPost("backup/info").raw;
-        auto resp = _req.httpPost("backup/info");
-        auto size = resp.getKey.to!size_t;
-        auto rez  = resp
-            .getMultiKey
-            .array
-            .slide(5, 5)
-            .map!"a[0..4]"
-            //.map!(x => x.map!( el => el.split(": ")[1] ) )
-            .map!(args => args.BackupUnit);
-        //pragma(msg, isForwardRange!(typeof(rez)));
-        return rez;
+        //auto resp = _req.httpPost("backup/info");
+        //auto size = resp.getKey.to!size_t;
+        //auto rez  = resp
+        //    .getMultiKey
+        //    .array
+        //    .slide(5, 5)
+        //    .map!"a[0..4]"
+        //    //.map!(x => x.map!( el => el.split(": ")[1] ) )
+        //    .map!(args => args.BackupUnit);
+        ////pragma(msg, isForwardRange!(typeof(rez)));
+        //return rez;
+        return _req.httpPost("backup/info").BackupUnitsRange;
     }
 
     
