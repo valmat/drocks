@@ -39,7 +39,7 @@ public:
     }
 
     // multi get key-value pairs by keys
-    auto mget(Range)(auto ref Range range)
+    auto get(Range)(auto ref Range range)
         if(isInputRange!Range && is(ElementType!Range == string))
     {
         return _req.httpGet("mget", range).getMultiPair();
@@ -55,17 +55,17 @@ public:
         return _req.httpPost("set", pair.serialize()).isOk();
     }
 
-    // remove key from db
-    bool del(string key)
-    {
-        return _req.httpPost("del", key).isOk();
-    }
-
     // multi set values for keys
     bool mset(Range)(auto ref Range pairs)
         if(isInputRange!Range && is(ElementType!Range == Pair))
     {
         return _req.httpPost("mset", pairs).isOk();
+    }
+
+    // remove key from db
+    bool del(string key)
+    {
+        return _req.httpPost("del", key).isOk();
     }
 
     // Multi range of keys from db
@@ -115,7 +115,7 @@ public:
         return _req.httpPost("backup/del", id).isOk;
     }
 
-    // Remove backup by ID
+    // Remove backup by IDs
     auto backupMdel(Range)(auto ref Range ids)
         if(isInputRange!Range && isIntegral!(ElementType!Range))
     {
