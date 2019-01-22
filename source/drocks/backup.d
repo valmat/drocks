@@ -1,9 +1,6 @@
 module drocks.backup;
-import std.conv : to;
 
-//import std.stdio;
-//import std.typecons;
-//import std.string;
+import std.conv      : to;
 import std.range     : array, slide;
 import std.algorithm : map;
 
@@ -56,11 +53,11 @@ struct BackupUnitsRange
     {
         return _size;
     }
-    bool empty() //const
+    bool empty()
     {
         return _range.empty;
     }
-    auto front() //const @property
+    auto front()
     {
         return _range.front;
     }
@@ -68,5 +65,4 @@ struct BackupUnitsRange
     {
         _range.popFront;
     }
-
 }
