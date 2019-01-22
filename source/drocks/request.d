@@ -1,18 +1,17 @@
 module drocks.request;
 
-//import std.typecons;
-import std.range : join;
-//import std.string;
+import std.stdio   : stderr, writeln;
+import std.range     : join, isInputRange, ElementType;
+import std.traits    : isIntegral;
 import std.algorithm : map;
-import std.stdio  : stderr, writeln;
-import std.socket : InternetAddress, SocketException;
-import std.conv   : to;
+import std.socket    : InternetAddress, SocketException;
+import std.conv      : to;
 static import uri = std.uri;
 
 public import drocks.exception : ClientException;
 import drocks.sockhandler      : SockHandler;
 import drocks.response         : Response;
-
+import drocks.pair             : Pair;
 
 // Creates sockets and generates requests
 struct Request
@@ -41,6 +40,7 @@ public:
             throw new ClientException(e);
         }
 
+        pragma(msg, "DELME ", __FILE__, " ",__LINE__);
         //stderr.writeln("~~~~~~~~~~~~~~~~");
         //stderr.writeln(req);
         //stderr.writeln("~~~~~~~~~~~~~~~~");
@@ -63,7 +63,9 @@ public:
         return Response(sock);
     }
 
-    // GET request
+    //
+    // GET requests
+    //
     Response httpGet(string path)
     {
         string buf;
@@ -73,7 +75,6 @@ public:
         return this.request(buf);
     }
 
-    // GET request
     Response httpGet(string path, string data)
     {
         string buf;
@@ -83,42 +84,68 @@ public:
         return this.request(buf);
     }
 
-    Response httpGet(Range)(string path, Range range)
+    Response httpGet(T)(string path, auto ref T data)
+        if(isIntegral!T)
+    {
+        return this.httpGet(path, data.to!string);
+    }
+
+    Response httpGet(Range)(string path, auto ref Range range)
+        if(isInputRange!Range && is(ElementType!Range == string))
     {
         static import uri = std.uri;
         string buf;
         string data = range
-            .map!( (string x) {return uri.encode(x);})
+            .map!( (const string x) {return uri.encode(x);})
             .join("&");
 
-        buf  = "GET /" ~ path  ~ "?" ~ data ~ " HTTP/1.1\r\n" ~
-               "Host:" ~ _host ~ "\r\n" ~
-               headsEnd;
-
-        return this.request(buf);
+        return this.httpGet(path, data);
     }
 
-    // POST request
-    Response httpPost(string path, string data) {
+    //
+    // POST requests
+    //
+    Response httpPost(string path, string data)
+    {
         string buf;
-        buf  = "POST /" ~ path ~ " HTTP/1.1\r\n" ~
-               "Host:" ~ _host ~ "\r\n" ~
+        buf  = headsStartPost(path) ~
                headsEndPost(data.length) ~
                data;
 
-        //[buf].writeln;
         return this.request(buf);
     }
 
-    // POST request
-    Response httpPost(string path) {
-        string buf;
-        buf  = "POST /" ~ path ~ " HTTP/1.1\r\n" ~
-               "Host:" ~ _host ~ "\r\n" ~
-               headsEnd;
+    Response httpPost(T)(string path, auto ref T data)
+        if(isIntegral!T)
+    {
+        return this.httpPost(path, data.to!string);
+    }
 
-        //[buf].writeln;
-        return this.request(buf);
+    Response httpPost(string path)
+    {
+        return this.request( headsStartPost(path) ~ headsEnd );
+    }
+
+    Response httpPost(Range)(string path, auto ref Range range)
+        if(isInputRange!Range && is(ElementType!Range == string))
+    {
+        return this.httpPost(path, range.join("\n"));
+    }
+
+    Response httpPost(Range)(string path, auto ref Range range)
+        if(isInputRange!Range && is(ElementType!Range == Pair))
+    {
+        string data = range
+            .map!( (const Pair x) {return x.serialize;})
+            .join("\n");
+
+        return this.httpPost(path, data);
+    }
+
+    Response httpPost(Range)(string path, auto ref Range range)
+        if(isInputRange!Range && isIntegral!(ElementType!Range))
+    {
+        return this.httpPost(path, range.map!"a.to!string");
     }
 
 
@@ -128,6 +155,12 @@ private:
         "Content-Type: charset=UTF-8\r\n" ~
         "Connection: Close\r\n\r\n";
 
+    string headsStartPost(string path)
+    {
+        return 
+            "POST /" ~ path ~ " HTTP/1.1\r\n" ~
+            "Host:" ~ _host ~ "\r\n";
+    }
     string headsEndPost(size_t len)
     {
         return 

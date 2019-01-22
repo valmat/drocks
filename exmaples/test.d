@@ -42,19 +42,19 @@ void main()
         //writeln(`[db.get("key2del")]:`);
         //[db.get("key2del")].writeln;
 
-        //`[db.mset(["key-1","key-2","key-3",])]`.writeln;
-        //[db.mset([
-        //    Pair("key-1", "val-1"),
-        //    Pair("key-2", "val-2"),
-        //    Pair("key-3", "val-3"),
-        //])].writeln;
-        //`[db.mget(["key-1","key-2","key-3",])]`.writeln;
-        //[db.mget(["key-1","key-2","key-3",])].writeln;
+        `[db.mset(["key-1","key-2","key-3",])]`.writeln;
+        [db.mset([
+            Pair("key-1", "val-1"),
+            Pair("key-2", "val-2"),
+            Pair("key-3", "val-3"),
+        ])].writeln;
+        `[db.mget(["key-1","key-2","key-3",])]`.writeln;
+        [db.mget(["key-1","key-2","key-3",])].writeln;
 
-        //`[db.mdel(["key-1","key-2","key-3",])]`.writeln;
-        //[db.mdel(["key-1","key-2","key-3",])].writeln;
-        //`[db.mget(["key-1","key-2","key-3",])]`.writeln;
-        //[db.mget(["key-1","key-2","key-3",])].writeln;
+        `[db.mdel(["key-1","key-2","key-3",])]`.writeln;
+        [db.mdel(["key-1","key-2","key-3",])].writeln;
+        `[db.mget(["key-1","key-2","key-3",])]`.writeln;
+        [db.mget(["key-1","key-2","key-3",])].writeln;
 
         //`[db.mget(["key-1","key-2","key-3",])]`.writeln;
         //[db.mget(["key-1","key-2","key-3",])].writeln;
@@ -83,8 +83,8 @@ void main()
         ////db.backupInfo().writeln;
         //[db.backupInfo().length].writeln;
 
-        //writeln(`[db.backupDel(8)]:`);
-        //[db.backupDel(8)].writeln;
+        writeln(`[db.backupDel(8)]:`);
+        [db.backupDel(8)].writeln;
 
         //writeln(`[db.backupMdel([12, 13, 15, 2])]:`);
         //[db.backupMdel([12, 13, 15, 2]).array].writeln;
