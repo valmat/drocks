@@ -103,6 +103,12 @@ public:
         return _req.httpGet("tail").getMultiPair();
     }
 
+    // Make database backup
+    auto backup() {
+        //return _req.httpPost("backup").raw();
+        return _req.httpPost("backup").isOk();
+    }
+
     
 
     static struct KeyExist

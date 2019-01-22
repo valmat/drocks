@@ -75,8 +75,13 @@ void main()
 
         //writeln(`[db.getall("key")]:`);
         //[db.getall("key").array].writeln;
-        writeln(`[db.getall()]:`);
-        [db.getall().array].writeln;
+        //writeln(`[db.getall()]:`);
+        //[db.getall().array].writeln;
+
+        writeln(`[db.backup()]:`);
+        [db.backup()].writeln;
+
+
 
 
         //writeln(`[db.mget(["empty", "incr1"]).array]:`);
