@@ -1,9 +1,7 @@
 #!/usr/bin/rdmd --shebang=-I../source -I.
 
 import std.stdio;
-//import std.typecons;
-//import std.range;
-import drocks : ClientException;
+import drocks       : ClientException;
 import customclient : CustomClient;
 
 void main()
@@ -12,26 +10,26 @@ void main()
 
     try {
 
-        //writeln(`[db.get("key1")]:`);
-        //[db.get("key1")].writeln;
+        writeln(`[db.get("key1")]:`);
+        [db.get("key1")].writeln;
 
-        //`[db.getIncr]`.writeln;
-        //[db.getIncr("incr1"     )].writeln;
-        //[db.getIncr("incr2",   5)].writeln;
-        //[db.getIncr("incr3", -11)].writeln;
-        //writeln(`[db.get("incr1")]:`);
-        //[db.get("incr1")].writeln;
-        //writeln(`[db.get("incr2")]:`);
-        //[db.get("incr2")].writeln;
-        //writeln(`[db.get("incr3")]:`);
-        //[db.get("incr3")].writeln;
+        `[db.getIncr]`.writeln;
+        [db.getIncr("incr1"     )].writeln;
+        [db.getIncr("incr2",   5)].writeln;
+        [db.getIncr("incr3", -11)].writeln;
+        writeln(`[db.get("incr1")]:`);
+        [db.get("incr1")].writeln;
+        writeln(`[db.get("incr2")]:`);
+        [db.get("incr2")].writeln;
+        writeln(`[db.get("incr3")]:`);
+        [db.get("incr3")].writeln;
 
 
-        //`[db.ping]`.writeln;
-        //[db.ping()].writeln;
+        `[db.ping]`.writeln;
+        [db.ping()].writeln;
 
-        //`[db.seekFirst]`.writeln;
-        //[db.seekFirst("ms")].writeln;
+        `[db.seekFirst]`.writeln;
+        [db.seekFirst("ms")].writeln;
 
 
         `[db.wstats]`.writeln;
@@ -47,7 +45,7 @@ void main()
         
 
     } catch (ClientException e) {
-        writeln([e.msg, e.file], e.line);
+        writeln(e.msg);
     }
     
 }

@@ -10,8 +10,8 @@ void main()
     auto db = Client.createDefault();
 
     try {
-        //writeln(`[db.get("key1")]:`);
-        //[db.get("key1")].writeln;
+        writeln(`[db.get("key1")]:`);
+        [db.get("key1")].writeln;
         //writeln(`[db.get("key2")]:`);
         //[db.get("key2")].writeln;
         //writeln(`[db.get("key3")]:`);

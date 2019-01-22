@@ -61,7 +61,7 @@ public:
     }
 
     // Receives a Header from socket
-    char[] receiveHeader()
+    char[] receiveHeader() //const
     {
         _line_buf.length = 0;
         //char[1] buf;
