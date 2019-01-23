@@ -20,127 +20,47 @@ import std.path : buildPath;
 import drocks;
 import ini : file2map, map2file;
 import server : ServerRunner;
+static import c;
+import opts;
 
-
-
-
-struct c {
-    @disable this();
-    @disable this(this);
-    enum string reset   = "\033[0m";
-    enum string red     = "\033[1m\033[31m";
-    enum string green   = "\033[1m\033[32m";
-    enum string yellow  = "\033[1m\033[33m";
-    enum string blue    = "\033[1m\033[34m";
-}
 
 void main(string[] args)
 {
-    auto rnd     = Random(unpredictableSeed);
-    auto rnd_pfx = uniform(0, int.max, ).to!string;
-
-    string serverBinary = "/usr/local/bin/rocksserver";
-    //string configFile   = "/etc/rocksserver/config.ini";
-    string configFile;
-    
-    string tmpDir       = tempDir() ~ "/rocksserver." ~ rnd_pfx;
-
-    //string host = "localhost";
-    string port = "5541";
-
-    bool   keepTemp = false;
-
-    auto helpInformation = getopt(args,
-        "binary|b", 
-        "RocksServer binary file location." ~
-        "\n\t\tDefault: \"" ~ serverBinary ~"\"",
-        &serverBinary,
-
-        "config|c",
-        "RocksServer config file location." ~
-        "\n\t\tBy default created automatically",
-        &configFile,
-
-        "tmp|t",
-        "temporary dir." ~
-        "\n\t\tDefault: \"" ~ tmpDir ~"\"\n",
-        &tmpDir,
-        
-        //"host|s",
-        //"DB host. Default: \"" ~ host ~"\".\n",
-        //&host,
-        
-        "port|p",
-        "DB port. Default: \"" ~ port ~"\".\n",
-        &port,
-        
-        "keep|k",
-        "Keep temporary files after tests finished.\n",
-        &keepTemp
-        
-    );
-    
-
-    if (helpInformation.helpWanted) {
-        defaultGetoptPrinter(
-            "Some information about the program.", 
-            helpInformation.options
-        );
+    auto opts = Opts(args);
+    if (!opts.valid) {
         return;
     }
 
-    writeln( c.yellow, "__________________________________________________________________", c.reset);
-    writeln( c.yellow, "RocksServer binary file location          :", c.green, serverBinary, c.reset);
-    writeln( c.yellow, "RocksServer config file location          :", c.green, configFile  , c.reset);
-    writeln( c.yellow, "temporary dir                             :", c.green, tmpDir      , c.reset);
-    //writeln( c.yellow, "DB host. If did not specified use default :", c.green, host        , c.reset);
-    writeln( c.yellow, "DB port.                                  :", c.green, port        , c.reset);
-
-    writeln( c.yellow, "Keep temporary files after tests finished :", c.green, keepTemp    , c.reset);
-
-    writeln( c.yellow, "__________________________________________________________________", c.reset);
-
     string[string] cfgMap;
-    if(configFile.length) {
-        cfgMap = configFile.file2map;
+    if(opts.configFile.length) {
+        cfgMap = opts.configFile.file2map;
     }
 
     cfgMap["log_level"]      = "debug"; 
-    cfgMap["error_log"]      = tmpDir ~ "/error.log"; 
-    cfgMap["backup_path"]    = tmpDir ~ "/backup"; 
-    cfgMap["extdir"]         = tmpDir ~ "/plugins";
-    cfgMap["db_path"]        = tmpDir ~ "/db";
+    cfgMap["error_log"]      = opts.tmpDir ~ "/error.log"; 
+    cfgMap["backup_path"]    = opts.tmpDir ~ "/backup"; 
+    cfgMap["extdir"]         = opts.tmpDir ~ "/plugins";
+    cfgMap["db_path"]        = opts.tmpDir ~ "/db";
 
     //if(host.length) {
     //    cfgMap["server_host"] = host;
     //}
-    if(port.length) {
-        cfgMap["server_port"] = port;
+    if(opts.port.length) {
+        cfgMap["server_port"] = opts.port;
     }
 
-    string configFileNew = tmpDir ~ "/configs.ini";
 
-    writeln( c.blue, "RocksServer options:", c.reset);
-    foreach(key, ref val; cfgMap) {
-        writeln( c.yellow, key.leftJustifier(20, ' '), " : ", c.green, val, c.reset);
-    }
-    writeln( c.yellow, "__________________________________________________________________", c.reset);
-
-    cfgMap["backup_path"] .buildPath.mkdirRecurse; 
-    cfgMap["extdir"]      .buildPath.mkdirRecurse;
-    cfgMap["db_path"]     .buildPath.mkdirRecurse;
-    
     // Create INI configs file
-    cfgMap.map2file(configFileNew);
+    cfgMap.map2file(opts.configFileNew);
 
-    auto server = ServerRunner(serverBinary, configFileNew);
+    cfgMap.showMap;
 
-
+    auto server = ServerRunner(opts.serverBinary, opts.configFileNew);
 
     try {
-        //auto db = Client(host, port.to!ushort);
-        auto db = Client("127.0.0.1", port.to!ushort);
-        
+        //auto db = Client(host, opts.port.to!ushort);
+        auto db = Client("127.0.0.1", opts.port.to!ushort);
+
         writeln(`[db.get("key1")]:`);
         [db.get("key1")].writeln;
 
@@ -285,10 +205,6 @@ void main(string[] args)
     }
 
 
-    // Remove temporary dir
-    if(!keepTemp) {
-        tmpDir.rmdirRecurse;
-    }
-    
+
     
 }

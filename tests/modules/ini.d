@@ -1,6 +1,7 @@
 module ini;
 
-//import std.file;
+import std.stdio     : writeln;
+import std.string    : leftJustifier;
 import std.conv      : to;
 import std.algorithm : map, filter;
 import std.string    : indexOf, strip;
@@ -47,3 +48,6 @@ void map2file(string[string] map, string fileName)
         file.writeln(key, ` = `, val);
     }
 }
+
+
+
