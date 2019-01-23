@@ -1,7 +1,7 @@
 #!/usr/bin/rdmd --shebang=-I../source -I.
 
 import std.stdio;
-import std.typecons;
+import std.typecons : Tuple, tuple;
 import std.range;
 import drocks;
 
@@ -67,6 +67,27 @@ void main()
         //`[db.get(["key-1","key-2","key-3",])]`.writeln;
         //[db.get(["key-1","key-2","key-3",])].writeln;
 
+
+        //`[db.set(["key-1","key-2","key-3",])]`.writeln;
+        //[db.set([
+        //    tuple("key-1", "val-1@"),
+        //    tuple("key-2", "val-2@"),
+        //    tuple("key-3", "val-3@"),
+        //])].writeln;
+        //`[db.get(["key-1","key-2","key-3",])]`.writeln;
+        //[db.get(["key-1","key-2","key-3",])].writeln;
+
+        `[db.set(["key-1","key-2","key-3",])]`.writeln;
+        [db.set([
+            "key-1" : "val-1*",
+            "key-2" : "val-2*",
+            "key-3" : "val-3*",
+        ])].writeln;
+        `[db.get(["key-1","key-2","key-3",])]`.writeln;
+        [db.get(["key-1","key-2","key-3",])].writeln;
+
+
+
         //`[db.del(["key-1","key-2","key-3",])]`.writeln;
         ////[db.del(["key-1","key-2","key-3",])].writeln;
         //[db.del("key-1","key-2","key-3")].writeln;
@@ -102,9 +123,8 @@ void main()
         //[db.get("incr4")].writeln;
 
 
-        `[ db["key1","key2","key3"] ]`.writeln;
-        [ db["key1","key2","key3"] ].writeln;
-
+        //`[ db["key1","key2","key3"] ]`.writeln;
+        //[ db["key1","key2","key3"] ].writeln;
 
 
         //writeln(`[db.getall("key")]:`);

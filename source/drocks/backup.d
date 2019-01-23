@@ -49,14 +49,17 @@ struct BackupUnitsRange
         _range = makeRange(resp);
     }
 
+    @property
     size_t length() const
     {
         return _size;
     }
+    @property
     bool empty()
     {
         return _range.empty;
     }
+    @property
     auto front()
     {
         return _range.front;

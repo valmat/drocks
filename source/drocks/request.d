@@ -139,13 +139,21 @@ public:
     }
 
     Response httpPost(Range)(const string path, auto ref Range range)
-        if(isInputRange!Range && is(ElementType!Range == Pair))
+        if( isInputRange!Range && is(ElementType!Range == Pair) )
     {
         string data = range
             .map!( (const Pair x) {return x.serialize;})
             .join("\n");
 
         return this.httpPost(path, data);
+    }
+
+    Response httpPost(Range)(const string path, auto ref Range range)
+        if( isInputRange!Range && is(ElementType!Range: Tuple!(string, string)) )
+    {
+        return this.httpPost(path, range
+            .map!( (const Tuple!(string, string) x) {return Pair(x);})
+        );
     }
 
     Response httpPost(Range)(const string path, auto ref Range range)

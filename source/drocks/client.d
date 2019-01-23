@@ -1,9 +1,11 @@
 module drocks.client;
 
-import std.stdio : stderr, writeln;
-import std.range   : join, isInputRange, ElementType;
-import std.traits  : isIntegral;
-import std.conv    : to;
+import std.stdio  : stderr, writeln;
+import std.range    : join, isInputRange, ElementType;
+import std.traits   : isIntegral;
+import std.typecons : Tuple, tuple;
+import std.array    : byPair;
+import std.conv     : to;
 
 import drocks.exception : ClientException;
 import drocks.request   : Request;
@@ -66,6 +68,15 @@ public:
         if(isInputRange!Range && is(ElementType!Range == Pair))
     {
         return _req.httpPost("mset", pairs).isOk();
+    }
+    bool set(Range)(auto ref Range pairs)
+        if(isInputRange!Range && is(ElementType!Range: Tuple!(string, string)))
+    {
+        return _req.httpPost("mset", pairs).isOk();
+    }
+    bool set(string[string] pairs)
+    {
+        return _req.httpPost("mset", pairs.byPair()).isOk();
     }
 
     // remove key from db
