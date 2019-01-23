@@ -11,13 +11,16 @@ private:
     bool _opened = true;
 
 public:
-    
     @disable this(this);
     @disable this();
 
     this(string binary, string confFile)
     {
-        _pid = spawnProcess([binary, confFile]);
+        this([binary, confFile]);
+    }
+    this(string[] args)
+    {
+        _pid = spawnProcess(args);
 
         stderr.writeln("Waiting server start...");
         Thread.sleep(100.msecs);

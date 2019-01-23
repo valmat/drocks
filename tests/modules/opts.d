@@ -18,24 +18,31 @@ import std.conv : to;
 import std.getopt;
 import std.path : buildPath;
 
+import ini : file2map, map2file;
+
 static import c;
 
 struct Opts
 {
-    string serverBinary = "/usr/local/bin/rocksserver";
-    //string configFile   = "/etc/rocksserver/config.ini";
-    string configFile;
-    
+private:
     string tmpDir;
-
-    //string host = "localhost";
-    string port = "5541";
 
     bool keepTemp = false;
 
-    bool valid = true;
+    bool _valid = true;
     
     string configFileNew;
+
+    string[string] cfgMap;
+
+    string serverBinary = "/usr/local/bin/rocksserver";
+    //string configFile   = "/etc/rocksserver/config.ini";
+    string configFile;
+
+public:
+    
+    //string host = "localhost";
+    string port = "5541";
 
     this(string[] args)
     {
@@ -81,22 +88,55 @@ struct Opts
                 "Some information about the program.", 
                 helpInformation.options
             );
-            valid = false;
+            _valid = false;
             return;
         }
 
         buildPath(tmpDir ~ "/backup")  .mkdirRecurse; 
-        buildPath(tmpDir ~ "/plugins") .mkdirRecurse;
+buildPath(tmpDir ~ "/plugins") .mkdirRecurse;
         buildPath(tmpDir ~ "/db")      .mkdirRecurse;
+
+        if(configFile.length) {
+            cfgMap = configFile.file2map;
+        }
+
+        cfgMap["log_level"]      = "debug"; 
+        cfgMap["error_log"]      = tmpDir ~ "/error.log"; 
+        cfgMap["backup_path"]    = tmpDir ~ "/backup"; 
+        cfgMap["extdir"]         = tmpDir ~ "/plugins";
+        cfgMap["db_path"]        = tmpDir ~ "/db";
+
+        //if(host.length) {
+        //    cfgMap["server_host"] = host;
+        //}
+        if(port.length) {
+            cfgMap["server_port"] = port;
+        }
+
+
+        // Create INI configs file
+        cfgMap.map2file(configFileNew);
+
     }
 
     ~this()
     {
         // Remove temporary dir
-        if(valid && !keepTemp) {
+        if(_valid && !keepTemp) {
             tmpDir.rmdirRecurse;
         }
     }
+
+    bool valid() const
+    {
+        return _valid;
+    }
+
+    string[] servOpts() const
+    {
+        return [serverBinary, configFileNew];
+    }
+
 
     void show() const
     {
@@ -110,16 +150,13 @@ struct Opts
         writeln( c.yellow, "Keep temporary files after tests finished :", c.green, keepTemp    , c.reset);
 
         writeln( c.yellow, "__________________________________________________________________", c.reset);
-    }
-    
 
+        // RocksServer options
+        writeln( c.blue, "RocksServer options:", c.reset);
+        foreach(key, ref val; cfgMap) {
+            writeln( c.yellow, key.leftJustifier(20, ' '), " : ", c.green, val, c.reset);
+        }
+        writeln( c.yellow, "__________________________________________________________________", c.reset);
+    }
 }
 
-void showMap(string[string] cfgMap)
-{
-    writeln( c.blue, "RocksServer options:", c.reset);
-    foreach(key, ref val; cfgMap) {
-        writeln( c.yellow, key.leftJustifier(20, ' '), " : ", c.green, val, c.reset);
-    }
-    writeln( c.yellow, "__________________________________________________________________", c.reset);
-}

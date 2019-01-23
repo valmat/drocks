@@ -47,6 +47,7 @@ void map2file(string[string] map, string fileName)
     foreach(key, ref val; map) {
         file.writeln(key, ` = `, val);
     }
+    file.flush();
 }
 
 

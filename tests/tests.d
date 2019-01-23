@@ -6,7 +6,6 @@ import std.range    ;//: array;
 import std.file;//.tempDir
 import std.random;
 import std.string;
-import std.conv : to;
 import std.algorithm;
 import std.algorithm  : splitter, joiner;
 import std.range      : enumerate;
@@ -18,10 +17,10 @@ import std.getopt;
 import std.path : buildPath;
 
 import drocks;
-import ini : file2map, map2file;
 import server : ServerRunner;
 static import c;
 import opts;
+import check : checkTest, headTest;
 
 
 void main(string[] args)
@@ -30,39 +29,153 @@ void main(string[] args)
     if (!opts.valid) {
         return;
     }
+    opts.show();
 
-    string[string] cfgMap;
-    if(opts.configFile.length) {
-        cfgMap = opts.configFile.file2map;
-    }
-
-    cfgMap["log_level"]      = "debug"; 
-    cfgMap["error_log"]      = opts.tmpDir ~ "/error.log"; 
-    cfgMap["backup_path"]    = opts.tmpDir ~ "/backup"; 
-    cfgMap["extdir"]         = opts.tmpDir ~ "/plugins";
-    cfgMap["db_path"]        = opts.tmpDir ~ "/db";
-
-    //if(host.length) {
-    //    cfgMap["server_host"] = host;
-    //}
-    if(opts.port.length) {
-        cfgMap["server_port"] = opts.port;
-    }
-
-
-    // Create INI configs file
-    cfgMap.map2file(opts.configFileNew);
-
-    cfgMap.showMap;
-
-    auto server = ServerRunner(opts.serverBinary, opts.configFileNew);
+    auto server = ServerRunner(opts.servOpts);
 
     try {
+        
         //auto db = Client(host, opts.port.to!ushort);
         auto db = Client("127.0.0.1", opts.port.to!ushort);
 
-        writeln(`[db.get("key1")]:`);
-        [db.get("key1")].writeln;
+        //
+        // Now DB is empty
+        //
+        headTest("Get on empty base");
+        {
+            (db.get("key1") == "")
+                .checkTest(`db.getall("") on empty base`);
+
+            db.getall("key")
+                .equal(Pair[].init)
+                .checkTest(`db.getall("key") on empty base`);
+
+            db.getall()
+                .equal(Pair[].init)
+                .checkTest(`db.getall("") on empty base`);
+
+            db.del("key2del")
+                .checkTest(`db.del("key2del") on empty base`);
+        }
+        
+        //
+        // Set keys
+        //
+        headTest("Single set");
+        {
+            
+            db.set("dgdg", "QQQqqqQQQ")
+                .checkTest(`Single set by key & value`);
+
+            (db.get("dgdg") == "QQQqqqQQQ")
+                .checkTest(`Check previous`);
+
+
+            auto pair = Pair("hyhy", "JfTdW");
+            db.set(pair)
+                .checkTest(`Single set by Pair`);
+
+            (db.get(pair.key) == pair.value)
+                .checkTest(`Check previous`);
+
+        }
+
+        headTest("Set Pairs range");
+        {
+            auto range = [
+                Pair("key:1:_1", "val-1(1)"),
+                Pair("key:1:_2", "val-2(1)"),
+                Pair("key:1:_3", "val-3(1)"),
+            ];
+            auto keys   = range.map!(x => x.key);
+
+            db.set(range)
+                .checkTest(`db.set(range) Set Pairs range`);
+
+            db.get(keys)
+                .equal(range)
+                .checkTest(`Check previous`);
+        }
+
+        headTest("Set tuples range");
+        {
+            auto range = [
+                tuple("key:2:_1", "val-1@2"),
+                tuple("key:2:_2", "val-2@2"),
+                tuple("key:2:_3", "val-3@2"),
+            ];
+            auto range1 = range.map!(x => Pair(x));
+            auto keys   = range1.map!(x => x.key);
+
+            db.set(range)
+                .checkTest(`db.set(range) Set tuples range`);
+
+            db.get(keys)
+                .equal(range1)
+                .checkTest(`Check previous`);
+        }
+
+        headTest("Set map");
+        {
+            auto map = [
+                "key:3:*1" : "val-1*",
+                "key:3:*2" : "val-2*",
+                "key:3:*3" : "val-3*",
+            ];
+            auto range = map.byPair.map!(x => Pair(x));
+            auto keys   = map.byKey;
+
+            db.set(map)
+                .checkTest(`db.set(range) Set map`);
+
+            db.get(keys)
+                .equal(range)
+                .checkTest(`Check previous`);
+        }
+
+        headTest("Set map");
+        {
+            auto map = [
+                "key:3:*1" : "val-1*",
+                "key:3:*2" : "val-2*",
+                "key:3:*3" : "val-3*",
+            ];
+            auto range = map.byPair.map!(x => Pair(x));
+            auto keys   = map.byKey;
+
+            db.set(map)
+                .checkTest(`db.set(range) Set map`);
+
+            db.get(keys)
+                .equal(range)
+                .checkTest(`db.get(keys) (Check previous)`);
+        }
+
+
+
+        //writeln(`[db.set("key2del", "KeyToDel")]:`);
+        //[db.set("key2del", "KeyToDel")].writeln;
+        //writeln(`[db.get("key2del")]:`);
+        //[db.get("key2del")].writeln;
+        //writeln(`[db.del("key2del")]:`);
+        //[db.del("key2del")].writeln;
+        //writeln(`[db.get("key2del")]:`);
+        //[db.get("key2del")].writeln;
+
+            //db.del(["key-1","key-2","key-3"])
+            //    .checkTest(`db.del(["key-1","key-2","key-3"])`);
+
+            //db.get(["key-1","key-2","key-3"])
+            //    .writeln;
+                
+            //db.get(["key-1","key-2","key-3"])
+            //    .equal(Pair[].init)
+            //    .checkTest(`db.get(["key-1","key-2","key-3"]) (Empty values)`);
+
+
+
+
+
 
         //writeln(`[db.get("key2")]:`);
         //[db.get("key2")].writeln;
@@ -105,33 +218,6 @@ void main(string[] args)
         //writeln(`[db.get("key2del")]:`);
         //[db.get("key2del")].writeln;
 
-        //`[db.set(["key-1","key-2","key-3",])]`.writeln;
-        //[db.set([
-        //    Pair("key-1", "val-1"),
-        //    Pair("key-2", "val-2"),
-        //    Pair("key-3", "val-3"),
-        //])].writeln;
-        //`[db.get(["key-1","key-2","key-3",])]`.writeln;
-        //[db.get(["key-1","key-2","key-3",])].writeln;
-
-
-        //`[db.set(["key-1","key-2","key-3",])]`.writeln;
-        //[db.set([
-        //    tuple("key-1", "val-1@"),
-        //    tuple("key-2", "val-2@"),
-        //    tuple("key-3", "val-3@"),
-        //])].writeln;
-        //`[db.get(["key-1","key-2","key-3",])]`.writeln;
-        //[db.get(["key-1","key-2","key-3",])].writeln;
-
-        //`[db.set(["key-1","key-2","key-3",])]`.writeln;
-        //[db.set([
-        //    "key-1" : "val-1*",
-        //    "key-2" : "val-2*",
-        //    "key-3" : "val-3*",
-        //])].writeln;
-        //`[db.get(["key-1","key-2","key-3",])]`.writeln;
-        //[db.get(["key-1","key-2","key-3",])].writeln;
 
         //`[db.del(["key-1","key-2","key-3",])]`.writeln;
         ////[db.del(["key-1","key-2","key-3",])].writeln;
