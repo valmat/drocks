@@ -49,6 +49,3 @@ void map2file(string[string] map, string fileName)
     }
     file.flush();
 }
-
-
-

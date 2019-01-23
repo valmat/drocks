@@ -1,26 +1,16 @@
 #!/usr/bin/rdmd --shebang=-I../source -I.  -I./modules
 
-import std.stdio    ;
-import std.typecons ;//: Tuple, tuple;
-import std.range    ;//: array;
-import std.file;//.tempDir
-import std.random;
-import std.string;
-import std.algorithm;
-import std.algorithm  : splitter, joiner;
-import std.range      : enumerate;
-import std.string     : indexOf, strip;
+import std.stdio      : writeln;
+import std.typecons   : Tuple, tuple;
+import std.range      : array, byPair;
+import std.algorithm  : map, equal;
 import std.functional : forward;
-import std.stdio      : File;
-import std.conv : to;
-import std.getopt;
-import std.path : buildPath;
+import std.conv       : to;
 
 import drocks;
+import opts   : Opts;
 import server : ServerRunner;
-static import c;
-import opts;
-import check : checkTest, headTest;
+import check  : checkTest, headTest;
 
 bool not(T)(auto ref T x) {return !x;}
 bool eq(T)(auto ref T lhs, auto ref T rhs) {return lhs == rhs;}
@@ -256,7 +246,7 @@ void main(string[] args)
                 .checkTest(`Check previous`);
         }
 
-        headTest("Ingrements keys");
+        headTest("Increments keys");
         {
             db.incr("incr1")
                 .checkTest(`Check increment`);
@@ -437,97 +427,66 @@ void main(string[] args)
             //db.backupInfo.map!(x => x.id).writeln;
         }
 
+        //key:
+        headTest("Other iterators");
+        {
+            db.getall("key:")
+                .equal([
+                    Pair("key:1:_1", "val-1(1)"),
+                    Pair("key:1:_2", "val-2(1)"),
+                    Pair("key:1:_3", "val-3(1)"),
+                    Pair("key:2:_1", "val-1@2"),
+                    Pair("key:2:_2", "val-2@2"),
+                    Pair("key:2:_3", "val-3@2"),
+                    Pair("key:3:*1", "val-1*"),
+                    Pair("key:3:*2", "val-2*"),
+                    Pair("key:3:*3", "val-3*")
+                ])
+                .checkTest(`Check Prefix iterator`);
+
+            db.getall()
+                .equal([
+                    Pair("dgdg", "QQQqqqQQQ"),
+                    Pair("hyhy", "JfTdW"),
+                    Pair("incr1", "1"),
+                    Pair("incr2", "5"),
+                    Pair("incr3", "-11"),
+                    Pair("incr4", "1"),
+                    Pair("incr5", "-1"),
+                    Pair("incr6", "4294967295"),
+                    Pair("incr7", "-4294967295"),
+                    Pair("incr8", "-4294967295"),
+                    Pair("key:1:_1", "val-1(1)"),
+                    Pair("key:1:_2", "val-2(1)"),
+                    Pair("key:1:_3", "val-3(1)"),
+                    Pair("key:2:_1", "val-1@2"),
+                    Pair("key:2:_2", "val-2@2"),
+                    Pair("key:2:_3", "val-3@2"),
+                    Pair("key:3:*1", "val-1*"),
+                    Pair("key:3:*2", "val-2*"),
+                    Pair("key:3:*3", "val-3*"),
+                    Pair("pref:_0_", "\r\n1\n%%%\t^\n"),
+                    Pair("pref:_1_", "\r\n2\n%%%\t^\n"),
+                    Pair("pref:_2_", "\r\n3\n%%%\t^\n"),
+                    Pair("pref:_4_", "\n4\n%\t^%%\n\r")
+                ])
+                .checkTest(`Check all-pairs iterator`);
+        }
+
+        headTest("stats");
+        {
+            db.stats()
+                .length
+                .not.not
+                .checkTest(`Check db.stats().length`);
+        }
+        headTest("");
 
 
-
-
-       
-
-
-
-        //writeln(`[ db["key1"] ]:`);
-        //[ db["key1"] ].writeln;
-        //writeln(`[ db["key1", "key2", "keyq"] ]:`);
-        //[ db["key1", "key2", "keyq"] ].writeln;
-
-        //writeln(`[ db["key1"] ]:`);
-        //writeln(db["key2del_"] = "KeyToDel_");
-        //writeln(`[ db["key1", "key2", "keyq"] ]:`);
-        //[ db["key1", "key2", "keyq"] ].writeln;
-
-        //writeln(`[db.set("keyq", "QQQqqqQQQ")]:`);
-        //[db.set("keyq", "QQQqqqQQQ")].writeln;
-        //writeln(`[db.get("keyq")]:`);
-        //[db.get("keyq")].writeln;
-
-        //writeln(`[db.has("keyq")]:`);
-        //[db.has("keyq")].writeln;
-        //[db.has("keyq").has].writeln;
-        //[db.has("keyq").value].writeln;
-
-        //auto a = db.get(["key1","key2","key3",]).array;
-        //a.writeln;
-        //[db.get(["key1","key2","key3",])].writeln;
-
-
-        //`[db.get(["key-1","key-2","key-3",])]`.writeln;
-        //[db.get(["key-1","key-2","key-3",])].writeln;
-
-        //`[db.get(["key-1","key-2","key-3",])]`.writeln;
-        //[db.get(["key-1","key-2","key-3",])].writeln;
-
-
-        //`[db.incr]`.writeln;
-        //( db["incr4"] += 7 ).writeln;
-        //`[db.get("incr4")]:`.writeln;
-        //[db.get("incr4")].writeln;
-        //( db["incr4"] += -4 ).writeln;
-        //[db.get("incr4")].writeln;
-        //( db["incr4"] -= 1 ).writeln;
-        //[db.get("incr4")].writeln;
-        //( ++db["incr4"] ).writeln;
-        //[db.get("incr4")].writeln;
-        //( --db["incr4"] ).writeln;
-        //[db.get("incr4")].writeln;
-
-
-        //`[ db["key1","key2","key3"] ]`.writeln;
-        //[ db["key1","key2","key3"] ].writeln;
-
-
-        //writeln(`[db.getall("key")]:`);
-        //[db.getall("key").array].writeln;
-        //writeln(`[db.getall()]:`);
-        //[db.getall().array].writeln;
-
-        //writeln(`[db.backup()]:`);
-        //[db.backup()].writeln;
-
-        //writeln(`[db.backupInfo()]:`);
-        //[db.backupInfo().array].writeln;
-        ////db.backupInfo().writeln;
-        //[db.backupInfo().length].writeln;
-
-        //writeln(`[db.backupDel(8)]:`);
-        //[db.backupDel(8)].writeln;
-
-        //writeln(`[db.backupDel([12, 13, 15, 2])]:`);
-        //[db.backupDel([12, 13, 15, 2]).array].writeln;
-        
-        //writeln(`[db.stats()]:`);
-        //db.stats().writeln;
-
-        
-        //writeln(`[db.get(["empty", "incr1"]).array]:`);
-        //[db.get(["empty", "incr1"]).array].writeln;
 
     } catch (ClientException e) {
         writeln([e.msg, e.file], e.line);
     } catch (Exception e) {
-        writeln([e.msg, e.file], e.line);
+        writeln("\n", e.msg);
     }
-
-
-
-    
 }

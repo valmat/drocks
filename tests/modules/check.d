@@ -1,28 +1,16 @@
 module check;
 
-import std.stdio    ;
-import std.typecons ;//: Tuple, tuple;
-import std.range    ;//: array;
-import std.file;//.tempDir
-import std.random;
-import std.string;
-import std.algorithm;
-import std.algorithm  : splitter, joiner;
-import std.range      : enumerate;
-import std.string     : indexOf, strip;
-import std.functional : forward;
-import std.stdio      : File;
-import std.conv : to;
-import std.getopt;
-import std.path : buildPath;
-
+import std.stdio  : write, writeln;
+import std.string : leftJustifier;
+import std.conv   : to;
 
 static import c;
 
 void checkTest(bool valid, string msg)
 {
-    writeln('\n', c.yellow, msg, c.reset);
-    write( c.blue, "".leftJustifier(20, '.'), c.reset);
+    write("\n   ", c.yellow, (msg ~ c.blue).to!string.leftJustifier(70, '.').to!string  );
+    write(c.reset);
+
     if(valid) {
         writeln(c.green, "OK", c.reset);
     } else {
@@ -31,8 +19,10 @@ void checkTest(bool valid, string msg)
     }
 }
 
-void headTest(string msg)
+void headTest(const string msg)
 {
-    writeln( c.blue, "".leftJustifier(50, '.'), c.reset);
-    writeln(c.gray, msg, c.reset);
+    string m = "\n".leftJustifier(20, '.').to!string ~ c.white ~ msg ~ c.gray;
+    m = m.leftJustifier(85, '.').to!string;
+    
+    writeln( c.gray, m, c.reset);
 }
