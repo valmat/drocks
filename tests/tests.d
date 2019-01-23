@@ -137,24 +137,6 @@ void main(string[] args)
                 .checkTest(`Get range & Check previous`);
         }
 
-        headTest("Set map");
-        {
-            auto map = [
-                "key:3:*1" : "val-1*",
-                "key:3:*2" : "val-2*",
-                "key:3:*3" : "val-3*",
-            ];
-            auto range = map.byPair.map!(x => Pair(x));
-            auto keys   = map.byKey.array;
-
-            db.set(map)
-                .checkTest(`db.set(range) Set map`);
-
-            db.get(keys)
-                .equal(range)
-                .checkTest(`Get array & (Check previous)`);
-        }
-
         headTest("Get multiargs");
         {
             auto range = [
@@ -292,20 +274,13 @@ void main(string[] args)
 
         headTest("Array access overloading");
         {
-            //auto values = [
-            //    "\r\n1\n%%%\t^\n",
-            //    "\r\n2\n%%%\t^\n",
-            //    "\r\n3\n%%%\t^\n",
-            //];
             auto range = [
                 Pair("pref:_0_", "\r\n1\n%%%\t^\n"),
                 Pair("pref:_1_", "\r\n2\n%%%\t^\n"),
                 Pair("pref:_2_", "\r\n3\n%%%\t^\n"),
             ];
-            //auto keys = range.map!(x => x.key);
             auto keys   = range.map!(x => x.key);
             auto values = range.map!(x => x.value);
-
 
             db.set(range)
                 .checkTest(`set("range")`);
@@ -321,25 +296,61 @@ void main(string[] args)
             db[keys]
                 .equal(range)
                 .checkTest(`db[keysRange]`);
-
-            keys[0..2]
-                .writeln;
-
-            db[keys[1..2]]
-                .writeln;
-                //.equal(values[0])
-                //.checkTest(`db[key]`);
-
-
-
-
-
- 
         }
 
-        headTest("array access overloading");
+        headTest("Array access overloading Assign");
         {
+            auto pair = Pair("pref:_4_", "\n4\n%\t^%%\n\r");
+            (db[pair.key] = pair.value)
+                .checkTest(`db[key] = value`);
 
+            db[pair.key]
+                .equal(pair.value)
+                .checkTest(`db[key]`);
+        }
+
+        headTest("Array access increment");
+        {
+            auto v = uint.max.to!string;
+
+            (++db["incr4"])
+                .checkTest(`++db[key]`);
+
+            db["incr4"]
+                .equal("1")
+                .checkTest(`Check previous`);
+
+            //
+            (--db["incr5"])
+                .checkTest(`--db[key]`);
+
+            db["incr5"]
+                .equal("-1")
+                .checkTest(`Check previous`);
+
+            //
+            (db["incr6"] += uint.max)
+                .checkTest(`db[key] +=...`);
+
+            db["incr6"]
+                .equal(v)
+                .checkTest(`Check previous`);
+
+            //
+            (db["incr7"] += 0UL - uint.max)
+                .checkTest(`db[key] +=...`);
+
+            db["incr7"]
+                .equal("-" ~ v)
+                .checkTest(`Check previous`);
+
+            //
+            (db["incr8"] -= uint.max)
+                .checkTest(`db[key] -=...`);
+
+            db["incr8"]
+                .equal("-" ~ v)
+                .checkTest(`Check previous`);
         }
 
 
