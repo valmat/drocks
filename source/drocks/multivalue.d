@@ -24,11 +24,11 @@ public:
         _cur = mixin("_resp." ~ ValueType ~ "()");
     }
 
-    bool empty() const
+    bool empty() const @property
     {
         return !_resp.isValid();
     }
-    auto front() const
+    auto front() const @property
     {
         return _cur;
     }

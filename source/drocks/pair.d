@@ -8,6 +8,6 @@ struct Pair
 
     string serialize() const
     {
-        return key ~ "\n" ~ value.length.to!string ~ "\n" ~ value;
+        return key ~ '\n' ~ value.length.to!string ~ '\n' ~ value;
     }
 }

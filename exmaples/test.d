@@ -88,18 +88,23 @@ void main()
         //writeln(`[db.get("incr3")]:`);
         //[db.get("incr3")].writeln;
 
-        `[db.incr]`.writeln;
-        ( db["incr4"] += 7 ).writeln;
-        `[db.get("incr4")]:`.writeln;
-        [db.get("incr4")].writeln;
-        ( db["incr4"] += -4 ).writeln;
-        [db.get("incr4")].writeln;
-        ( db["incr4"] -= 1 ).writeln;
-        [db.get("incr4")].writeln;
-        ( ++db["incr4"] ).writeln;
-        [db.get("incr4")].writeln;
-        ( --db["incr4"] ).writeln;
-        [db.get("incr4")].writeln;
+        //`[db.incr]`.writeln;
+        //( db["incr4"] += 7 ).writeln;
+        //`[db.get("incr4")]:`.writeln;
+        //[db.get("incr4")].writeln;
+        //( db["incr4"] += -4 ).writeln;
+        //[db.get("incr4")].writeln;
+        //( db["incr4"] -= 1 ).writeln;
+        //[db.get("incr4")].writeln;
+        //( ++db["incr4"] ).writeln;
+        //[db.get("incr4")].writeln;
+        //( --db["incr4"] ).writeln;
+        //[db.get("incr4")].writeln;
+
+
+        `[ db["key1","key2","key3"] ]`.writeln;
+        [ db["key1","key2","key3"] ].writeln;
+
 
 
         //writeln(`[db.getall("key")]:`);
