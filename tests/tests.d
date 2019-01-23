@@ -22,7 +22,15 @@ static import c;
 import opts;
 import check : checkTest, headTest;
 
-bool not(bool x) {return !x;}
+bool not(T)(auto ref T x) {return !x;}
+bool eq(T)(auto ref T lhs, auto ref T rhs) {return lhs == rhs;}
+
+//bool equal(T)(auto ref T lhs, auto ref T rhs)
+//    if (!isInputRange!T)
+//{return lhs == rhs;}
+//bool equal(T1, T2)(auto ref T1 lhs, auto ref T2 rhs)
+//    if (isInputRange!T1 && isInputRange!T2)
+//{return .equal(lhs, rhs);}
 
 void main(string[] args)
 {
@@ -353,29 +361,87 @@ void main(string[] args)
                 .checkTest(`Check previous`);
         }
 
-
-
-
-
-        /*
+        headTest("Backups");
         {
-            auto range = [
-                Pair("key:1:_1", "val-1(1)"),
-                Pair("key:1:_2", "val-2(1)"),
-                Pair("key:1:_3", "val-3(1)"),
-            ];
-            auto keys   = range.map!(x => x.key);
+            auto backupInfo = db.backupInfo;
+            
+            backupInfo
+                .equal(BackupUnit[].init)
+                .checkTest(`Check empty backups`);
+            backupInfo.length
+                .not
+                .checkTest(`Check empty backups length`);
 
-            db.set(range)
-                .checkTest(`db.set(range) Set Pairs range`);
 
-            db.get(keys)
-                .equal(range)
-                .checkTest(`Get range & Check previous`);
+            db.backup()
+                .checkTest(`Create first backup`);
 
+            db.backupInfo.length
+                .eq(1)
+                .checkTest(`Check backups length`);
+
+            db.backup();
+            db.backup();
+            db.backup();
+            db.backup();
+
+            db.backupInfo.length
+                .eq(5)
+                .checkTest(`Check backups length`);
+
+            db.backupInfo
+                .map!(x => x.id)
+                .equal([1, 2, 3, 4, 5])
+                .checkTest(`Check backups ids`);
+
+            db.backupDel(2)
+                .checkTest(`Check backupDel`);
+
+            db.backupDel(2)
+                .not
+                .checkTest(`Check backupDel repeat`);
+
+            db.backupInfo
+                .map!(x => x.id)
+                .equal([1, 3, 4, 5])
+                .checkTest(`Check backups ids`);
+
+            db.backupInfo.length
+                .eq(4)
+                .checkTest(`Check backups length`);
+
+            db.backup();
+            db.backup();
+            db.backup().checkTest(`Check backup creating`);
+            db.backup();
+
+            db.backupInfo
+                .map!(x => x.id)
+                .equal([1, 3, 4, 5, 6, 7, 8, 9])
+                .checkTest(`Check backups ids`);
+
+            db.backupDel([8, 4, 2, 6, 9])
+                .equal([true, true, false, true, true])
+                .checkTest(`Check backup(multi)Del`);
+
+            db.backupDel([8, 4, 2, 6, 9])
+                .equal([false, false, false, false, false])
+                .checkTest(`Check backup(multi)Del repeat`);
+
+            db.backupInfo
+                .map!(x => x.id)
+                .equal([1, 3, 5, 7])
+                .checkTest(`Check backups ids`);
+
+            //db.backupInfo.writeln;
+            //db.backupInfo.map!(x => x.id).writeln;
         }
-        */
 
+
+
+
+
+       
 
 
 
