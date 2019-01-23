@@ -1,8 +1,8 @@
 #!/usr/bin/rdmd --shebang=-I../source -I.
 
-import std.stdio;
+import std.stdio    : writeln;
 import std.typecons : Tuple, tuple;
-import std.range;
+import std.range    : array;
 import drocks;
 
 void main()
@@ -30,11 +30,6 @@ void main()
         //writeln(`[ db["key1", "key2", "keyq"] ]:`);
         //[ db["key1", "key2", "keyq"] ].writeln;
 
-
-
-
-        //writeln(`[db.set("key q", "QQQ QQQ")]:`);
-        //[db.set("keyq", "QQQ QQQ")].writeln;
         //writeln(`[db.set("keyq", "QQQqqqQQQ")]:`);
         //[db.set("keyq", "QQQqqqQQQ")].writeln;
         //writeln(`[db.get("keyq")]:`);
@@ -77,16 +72,14 @@ void main()
         //`[db.get(["key-1","key-2","key-3",])]`.writeln;
         //[db.get(["key-1","key-2","key-3",])].writeln;
 
-        `[db.set(["key-1","key-2","key-3",])]`.writeln;
-        [db.set([
-            "key-1" : "val-1*",
-            "key-2" : "val-2*",
-            "key-3" : "val-3*",
-        ])].writeln;
-        `[db.get(["key-1","key-2","key-3",])]`.writeln;
-        [db.get(["key-1","key-2","key-3",])].writeln;
-
-
+        //`[db.set(["key-1","key-2","key-3",])]`.writeln;
+        //[db.set([
+        //    "key-1" : "val-1*",
+        //    "key-2" : "val-2*",
+        //    "key-3" : "val-3*",
+        //])].writeln;
+        //`[db.get(["key-1","key-2","key-3",])]`.writeln;
+        //[db.get(["key-1","key-2","key-3",])].writeln;
 
         //`[db.del(["key-1","key-2","key-3",])]`.writeln;
         ////[db.del(["key-1","key-2","key-3",])].writeln;
@@ -150,17 +143,8 @@ void main()
         //db.stats().writeln;
 
         
-
-
-
-
         //writeln(`[db.get(["empty", "incr1"]).array]:`);
         //[db.get(["empty", "incr1"]).array].writeln;
-
-        
-
-
-        
 
     } catch (ClientException e) {
         writeln([e.msg, e.file], e.line);

@@ -9,7 +9,6 @@ void main()
     auto db = CustomClient.createDefault();
 
     try {
-
         writeln(`[db.get("key1")]:`);
         [db.get("key1")].writeln;
 
@@ -41,8 +40,6 @@ void main()
         db.wstats("num-files-at-level0") .writeln;
         "\t\t num-files-at-level1:"      .writeln;
         db.wstats("num-files-at-level1") .writeln;
-
-        
 
     } catch (ClientException e) {
         writeln(e.msg);

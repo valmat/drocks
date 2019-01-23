@@ -8,8 +8,6 @@ import std.socket    : InternetAddress, SocketException;
 import std.typecons  : Tuple, tuple;
 import std.conv      : to;
 
-static import uri = std.uri;
-
 public import drocks.exception : ClientException;
 import drocks.sockhandler      : SockHandler;
 import drocks.response         : Response;
@@ -41,11 +39,6 @@ public:
         } catch (SocketException e) {
             throw new ClientException(e);
         }
-
-        pragma(msg, "DELME ", __FILE__, " ",__LINE__);
-        //stderr.writeln("~~~~~~~~~~~~~~~~");
-        //stderr.writeln(req);
-        //stderr.writeln("~~~~~~~~~~~~~~~~");
 
         // Check response status
         auto status = sock.receiveHeader();
@@ -80,7 +73,7 @@ public:
     Response httpGet(const string path, string data)
     {
         string buf;
-        buf  = "GET /" ~ path  ~ "?" ~ uri.encode(data) ~ " HTTP/1.1\r\n" ~
+        buf  = "GET /" ~ path  ~ "?" ~ data ~ " HTTP/1.1\r\n" ~
                "Host:" ~ _host ~ "\r\n" ~
                headsEnd;
         return this.request(buf);
@@ -95,11 +88,7 @@ public:
     Response httpGet(Range)(const string path, auto ref Range range)
         if(isInputRange!Range && is(ElementType!Range == string))
     {
-        string data = range
-            .map!( (const string x) {return uri.encode(x);})
-            .join("&");
-
-        return this.httpGet(path, data);
+        return this.httpGet(path, range.join("&"));
     }
 
     Response httpGet(Args...)(const string path, auto ref Args args)
