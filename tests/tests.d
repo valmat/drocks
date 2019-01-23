@@ -44,7 +44,8 @@ void main(string[] args)
         //
         headTest("Get on empty base");
         {
-            (db.get("key1") == "")
+            db.get("key1")
+                .equal("")
                 .checkTest(`db.getall("") on empty base`);
 
             db.getall("key")
@@ -68,7 +69,8 @@ void main(string[] args)
             db.set("dgdg", "QQQqqqQQQ")
                 .checkTest(`Single set by key & value`);
 
-            (db.get("dgdg") == "QQQqqqQQQ")
+            db.get("dgdg")
+                .equal("QQQqqqQQQ")
                 .checkTest(`Single get & Check previous`);
 
 
@@ -76,7 +78,8 @@ void main(string[] args)
             db.set(pair)
                 .checkTest(`Single set by Pair`);
 
-            (db.get(pair.key) == pair.value)
+            db.get(pair.key)
+                .equal(pair.value)
                 .checkTest(`Single get & Check previous`);
 
         }
@@ -165,24 +168,48 @@ void main(string[] args)
                 .checkTest(`db.get("key:1:_1", "key:1:_2", "key:1:_3")`);
         }
 
+        headTest("Keys existing");
+        {
+            db.has("key:1:_1")
+                .checkTest(`db.has(existentKey)`);
+
+            db.has("key:1:_2").value
+                .equal("val-2(1)")
+                .checkTest(`db.has(existentKey).value`);
+
+            db.has("key:1:_4")
+                .not
+                .checkTest(`db.has(missingKey)`);
+
+            db.has("key:1:_5").value
+                .equal("")
+                .checkTest(`db.has(missingKey).value`);
+        }
+
         headTest("Single delete");
         {
             db.set(["key2del": "KeyToDel"])
                 .checkTest(`set("key2del")`);
 
-            (db.get("key2del") == "KeyToDel")
+            db.get("key2del")
+                .equal("KeyToDel")
                 .checkTest(`Single get & Check previous`);
 
             db.del("key2del")
                 .checkTest(`Single del`);
 
-            (db.get("key2del") == "")
+            db.get("key2del")
+                .equal("")
                 .checkTest(`Single get & Check previous`);
+
+            db.has("key2del")
+                .not
+                .checkTest(`Check previous`);
+
         }
 
         headTest("Multi delete ");
         {
-            
             auto range = [
                 Pair("delme_1", "ToDel*1"),
                 Pair("delme_2", "ToDel*2"),
@@ -208,6 +235,10 @@ void main(string[] args)
                 .equal(empty)
                 .checkTest(`Check previous`);
 
+            db.has("delme_2")
+                .not
+                .checkTest(`Check previous`);
+
             // range del
             db.set(range)
                 .checkTest(`set("range")`);
@@ -222,25 +253,12 @@ void main(string[] args)
             db.get(keys)
                 .equal(empty)
                 .checkTest(`Check previous`);
-        }
 
-        headTest("Keys existing");
-        {
-            db.has("key:1:_1")
-                .checkTest(`db.has(existentKey)`);
-
-            db.has("key:1:_2").value
-                .equal("val-2(1)")
-                .checkTest(`db.has(existentKey).value`);
-
-            db.has("key:1:_4")
+            db.has("delme_4")
                 .not
-                .checkTest(`db.has(missingKey)`);
-
-            db.has("key:1:_5").value
-                .equal("")
-                .checkTest(`db.has(missingKey).value`);
+                .checkTest(`Check previous`);
         }
+
 
 
 
@@ -275,11 +293,6 @@ void main(string[] args)
 
 
 
-
-        //writeln(`[db.get("key2")]:`);
-        //[db.get("key2")].writeln;
-        //writeln(`[db.get("key3")]:`);
-        //[db.get("key3")].writeln;
 
         //writeln(`[db.get("key1", "key2", "keyq")]:`);
         //[db.get("key1", "key2", "keyq")].writeln;
