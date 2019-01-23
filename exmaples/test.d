@@ -17,8 +17,20 @@ void main()
         //writeln(`[db.get("key3")]:`);
         //[db.get("key3")].writeln;
 
-        writeln(`[db.get("key1", "key2", "keyq")]:`);
-        [db.get("key1", "key2", "keyq")].writeln;
+        //writeln(`[db.get("key1", "key2", "keyq")]:`);
+        //[db.get("key1", "key2", "keyq")].writeln;
+
+        //writeln(`[ db["key1"] ]:`);
+        //[ db["key1"] ].writeln;
+        //writeln(`[ db["key1", "key2", "keyq"] ]:`);
+        //[ db["key1", "key2", "keyq"] ].writeln;
+
+        //writeln(`[ db["key1"] ]:`);
+        //writeln(db["key2del_"] = "KeyToDel_");
+        //writeln(`[ db["key1", "key2", "keyq"] ]:`);
+        //[ db["key1", "key2", "keyq"] ].writeln;
+
+
 
 
         //writeln(`[db.set("key q", "QQQ QQQ")]:`);
@@ -65,16 +77,30 @@ void main()
         //`[db.get(["key-1","key-2","key-3",])]`.writeln;
         //[db.get(["key-1","key-2","key-3",])].writeln;
 
+        //`[db.incr]`.writeln;
+        //[db.incr("incr1"     )].writeln;
+        //[db.incr("incr2",   5)].writeln;
+        //[db.incr("incr3", -11)].writeln;
+        //writeln(`[db.get("incr1")]:`);
+        //[db.get("incr1")].writeln;
+        //writeln(`[db.get("incr2")]:`);
+        //[db.get("incr2")].writeln;
+        //writeln(`[db.get("incr3")]:`);
+        //[db.get("incr3")].writeln;
+
         `[db.incr]`.writeln;
-        [db.incr("incr1"     )].writeln;
-        [db.incr("incr2",   5)].writeln;
-        [db.incr("incr3", -11)].writeln;
-        writeln(`[db.get("incr1")]:`);
-        [db.get("incr1")].writeln;
-        writeln(`[db.get("incr2")]:`);
-        [db.get("incr2")].writeln;
-        writeln(`[db.get("incr3")]:`);
-        [db.get("incr3")].writeln;
+        ( db["incr4"] += 7 ).writeln;
+        `[db.get("incr4")]:`.writeln;
+        [db.get("incr4")].writeln;
+        ( db["incr4"] += -4 ).writeln;
+        [db.get("incr4")].writeln;
+        ( db["incr4"] -= 1 ).writeln;
+        [db.get("incr4")].writeln;
+        ( ++db["incr4"] ).writeln;
+        [db.get("incr4")].writeln;
+        ( --db["incr4"] ).writeln;
+        [db.get("incr4")].writeln;
+
 
         //writeln(`[db.getall("key")]:`);
         //[db.getall("key").array].writeln;

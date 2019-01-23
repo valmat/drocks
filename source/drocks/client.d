@@ -51,6 +51,44 @@ public:
         return _req.httpGet("mget", args).getMultiPair();
     }
 
+    // https://dlang.org/spec/operatoroverloading.html
+    // Implementing array accsess overload
+    // get by db[...]
+    auto opIndex(Args...)(auto ref Args args)
+    {
+        return this.get(args);
+    }
+    // set by db[...] = ...
+    auto opIndexAssign(string val, string key)
+    {
+        return this.set(key, val);
+    }
+    // db[...] += ...
+    bool opIndexOpAssign(string op)(long value, string key)
+        if("+" == op)
+    {
+        return incr(key, value);
+    }
+    // db[...] += ...
+    bool opIndexOpAssign(string op)(long value, string key)
+        if("-" == op)
+    {
+        return incr(key, -value);
+    }
+
+    // ++db[...]
+    bool opIndexUnary(string op)(string key)
+        if("++" == op)
+    {
+        return incr(key);
+    }
+    // --db[...]
+    bool opIndexUnary(string op)(string key)
+        if("--" == op)
+    {
+        return incr(key, -1);
+    }
+
     // set value for key
     bool set(string key, string val)
     {
