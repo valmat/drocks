@@ -18,7 +18,9 @@ import std.getopt;
 import std.path : buildPath;
 
 import drocks;
-import ini;
+import ini : file2map, map2file;
+import server : ServerRunner;
+
 
 
 
@@ -43,18 +45,10 @@ void main(string[] args)
     
     string tmpDir       = tempDir() ~ "/rocksserver." ~ rnd_pfx;
 
-    string host;
-    string port;
+    //string host = "localhost";
+    string port = "5541";
 
-
-
-//auto rnd = rndGen;
-//rnd.take(3).writeln;
-
-//auto rnd1 = ;
-//// Generate an integer in [0, 1023]
-//auto a = ;
-//a.writeln;
+    bool   keepTemp = false;
 
     auto helpInformation = getopt(args,
         "binary|b", 
@@ -72,13 +66,18 @@ void main(string[] args)
         "\n\t\tDefault: \"" ~ tmpDir ~"\"\n",
         &tmpDir,
         
-        "host|s",
-        "DB host. If did not specified use default.\n",
-        &host,
+        //"host|s",
+        //"DB host. Default: \"" ~ host ~"\".\n",
+        //&host,
         
         "port|p",
-        "DB host. If did not specified use default.\n",
-        &port
+        "DB port. Default: \"" ~ port ~"\".\n",
+        &port,
+        
+        "keep|k",
+        "Keep temporary files after tests finished.\n",
+        &keepTemp
+        
     );
     
 
@@ -90,23 +89,21 @@ void main(string[] args)
         return;
     }
 
-    //if(tmpDirDflt == tmpDir) {
-
-    //}
-    //tmpDir = ;
-
-
     writeln( c.yellow, "__________________________________________________________________", c.reset);
     writeln( c.yellow, "RocksServer binary file location          :", c.green, serverBinary, c.reset);
     writeln( c.yellow, "RocksServer config file location          :", c.green, configFile  , c.reset);
     writeln( c.yellow, "temporary dir                             :", c.green, tmpDir      , c.reset);
-    writeln( c.yellow, "DB host. If did not specified use default :", c.green, host        , c.reset);
-    writeln( c.yellow, "DB host. If did not specified use default :", c.green, port        , c.reset);
+    //writeln( c.yellow, "DB host. If did not specified use default :", c.green, host        , c.reset);
+    writeln( c.yellow, "DB port.                                  :", c.green, port        , c.reset);
+
+    writeln( c.yellow, "Keep temporary files after tests finished :", c.green, keepTemp    , c.reset);
+
     writeln( c.yellow, "__________________________________________________________________", c.reset);
 
-    string[string] cfgMap = configFile.file2map;
-    [cfgMap].writeln;
-
+    string[string] cfgMap;
+    if(configFile.length) {
+        cfgMap = configFile.file2map;
+    }
 
     cfgMap["log_level"]      = "debug"; 
     cfgMap["error_log"]      = tmpDir ~ "/error.log"; 
@@ -114,31 +111,20 @@ void main(string[] args)
     cfgMap["extdir"]         = tmpDir ~ "/plugins";
     cfgMap["db_path"]        = tmpDir ~ "/db";
 
-    if(host.length) {
-        cfgMap["server_host"] = host;
-    }
-    if(host.length) {
+    //if(host.length) {
+    //    cfgMap["server_host"] = host;
+    //}
+    if(port.length) {
         cfgMap["server_port"] = port;
     }
 
-    [cfgMap].writeln;
-    
     string configFileNew = tmpDir ~ "/configs.ini";
 
-
-
-    writeln( c.yellow, "__________________________________________________________________", c.reset);
     writeln( c.blue, "RocksServer options:", c.reset);
     foreach(key, ref val; cfgMap) {
         writeln( c.yellow, key.leftJustifier(20, ' '), " : ", c.green, val, c.reset);
     }
     writeln( c.yellow, "__________________________________________________________________", c.reset);
-
-
-
-    //auto nested = dir.buildPath("a", "b", "c");
-    //nested.mkdirRecurse;
-
 
     cfgMap["backup_path"] .buildPath.mkdirRecurse; 
     cfgMap["extdir"]      .buildPath.mkdirRecurse;
@@ -147,17 +133,17 @@ void main(string[] args)
     // Create INI configs file
     cfgMap.map2file(configFileNew);
 
+    auto server = ServerRunner(serverBinary, configFileNew);
 
 
-
-
-
-
-    auto db = Client.createDefault();
 
     try {
-        //writeln(`[db.get("key1")]:`);
-        //[db.get("key1")].writeln;
+        //auto db = Client(host, port.to!ushort);
+        auto db = Client("127.0.0.1", port.to!ushort);
+        
+        writeln(`[db.get("key1")]:`);
+        [db.get("key1")].writeln;
+
         //writeln(`[db.get("key2")]:`);
         //[db.get("key2")].writeln;
         //writeln(`[db.get("key3")]:`);
@@ -294,6 +280,15 @@ void main(string[] args)
 
     } catch (ClientException e) {
         writeln([e.msg, e.file], e.line);
+    } catch (Exception e) {
+        writeln([e.msg, e.file], e.line);
     }
+
+
+    // Remove temporary dir
+    if(!keepTemp) {
+        tmpDir.rmdirRecurse;
+    }
+    
     
 }

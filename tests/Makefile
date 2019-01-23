@@ -73,8 +73,8 @@ o/tests.o: tests.d
 
 # SOURCES = $(SOURCES_lib) $(SOURCES_mdl)
 
-OBJECTS_lib := $(patsubst ../source/drocks/%.d, o/lib/%.o, $(SOURCES_lib))
-OBJECTS_mdl := $(patsubst ./modules/%.d,		o/mdl/%.o, $(SOURCES_mdl))
+OBJECTS_lib := $(patsubst ../source/drocks/%.d,o/lib/%.o, $(SOURCES_lib))
+OBJECTS_mdl := $(patsubst ./modules/%.d,o/mdl/%.o, $(SOURCES_mdl))
 
 
 
