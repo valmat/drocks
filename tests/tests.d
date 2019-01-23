@@ -22,6 +22,7 @@ static import c;
 import opts;
 import check : checkTest, headTest;
 
+bool not(bool x) {return !x;}
 
 void main(string[] args)
 {
@@ -61,14 +62,14 @@ void main(string[] args)
         //
         // Set keys
         //
-        headTest("Single set");
+        headTest("Single set & get");
         {
             
             db.set("dgdg", "QQQqqqQQQ")
                 .checkTest(`Single set by key & value`);
 
             (db.get("dgdg") == "QQQqqqQQQ")
-                .checkTest(`Check previous`);
+                .checkTest(`Single get & Check previous`);
 
 
             auto pair = Pair("hyhy", "JfTdW");
@@ -76,7 +77,7 @@ void main(string[] args)
                 .checkTest(`Single set by Pair`);
 
             (db.get(pair.key) == pair.value)
-                .checkTest(`Check previous`);
+                .checkTest(`Single get & Check previous`);
 
         }
 
@@ -94,7 +95,7 @@ void main(string[] args)
 
             db.get(keys)
                 .equal(range)
-                .checkTest(`Check previous`);
+                .checkTest(`Get range & Check previous`);
         }
 
         headTest("Set tuples range");
@@ -112,7 +113,7 @@ void main(string[] args)
 
             db.get(keys)
                 .equal(range1)
-                .checkTest(`Check previous`);
+                .checkTest(`Get range & Check previous`);
         }
 
         headTest("Set map");
@@ -130,7 +131,7 @@ void main(string[] args)
 
             db.get(keys)
                 .equal(range)
-                .checkTest(`Check previous`);
+                .checkTest(`Get range & Check previous`);
         }
 
         headTest("Set map");
@@ -141,36 +142,134 @@ void main(string[] args)
                 "key:3:*3" : "val-3*",
             ];
             auto range = map.byPair.map!(x => Pair(x));
-            auto keys   = map.byKey;
+            auto keys   = map.byKey.array;
 
             db.set(map)
                 .checkTest(`db.set(range) Set map`);
 
             db.get(keys)
                 .equal(range)
-                .checkTest(`db.get(keys) (Check previous)`);
+                .checkTest(`Get array & (Check previous)`);
+        }
+
+        headTest("Get multiargs");
+        {
+            auto range = [
+                Pair("key:1:_1", "val-1(1)"),
+                Pair("key:1:_2", "val-2(1)"),
+                Pair("key:1:_3", "val-3(1)"),
+            ];
+
+            db.get("key:1:_1", "key:1:_2", "key:1:_3")
+                .equal(range)
+                .checkTest(`db.get("key:1:_1", "key:1:_2", "key:1:_3")`);
+        }
+
+        headTest("Single delete");
+        {
+            db.set(["key2del": "KeyToDel"])
+                .checkTest(`set("key2del")`);
+
+            (db.get("key2del") == "KeyToDel")
+                .checkTest(`Single get & Check previous`);
+
+            db.del("key2del")
+                .checkTest(`Single del`);
+
+            (db.get("key2del") == "")
+                .checkTest(`Single get & Check previous`);
+        }
+
+        headTest("Multi delete ");
+        {
+            
+            auto range = [
+                Pair("delme_1", "ToDel*1"),
+                Pair("delme_2", "ToDel*2"),
+                Pair("delme_3", "ToDel*3"),
+                Pair("delme_4", "ToDel*3"),
+            ];
+            auto keys   = range.map!(x => x.key);
+            auto values = range.map!(x => x.value);
+            auto empty  = range.map!(x => Pair(x.key));
+
+            // multiargs del
+            db.set(range)
+                .checkTest(`set("range")`);
+
+            db.get(keys)
+                .equal(range)
+                .checkTest(`Check previous`);
+
+            db.del("delme_1","delme_2","delme_3","delme_4")
+                .checkTest(`multiargs del`);
+
+            db.get(keys)
+                .equal(empty)
+                .checkTest(`Check previous`);
+
+            // range del
+            db.set(range)
+                .checkTest(`set("range")`);
+
+            db.get(keys)
+                .equal(range)
+                .checkTest(`Check previous`);
+
+            db.del(keys)
+                .checkTest(`multiargs del`);
+
+            db.get(keys)
+                .equal(empty)
+                .checkTest(`Check previous`);
+        }
+
+        headTest("Keys existing");
+        {
+            db.has("key:1:_1")
+                .checkTest(`db.has(existentKey)`);
+
+            db.has("key:1:_2").value
+                .equal("val-2(1)")
+                .checkTest(`db.has(existentKey).value`);
+
+            db.has("key:1:_4")
+                .not
+                .checkTest(`db.has(missingKey)`);
+
+            db.has("key:1:_5").value
+                .equal("")
+                .checkTest(`db.has(missingKey).value`);
         }
 
 
 
-        //writeln(`[db.set("key2del", "KeyToDel")]:`);
-        //[db.set("key2del", "KeyToDel")].writeln;
-        //writeln(`[db.get("key2del")]:`);
-        //[db.get("key2del")].writeln;
-        //writeln(`[db.del("key2del")]:`);
-        //[db.del("key2del")].writeln;
-        //writeln(`[db.get("key2del")]:`);
-        //[db.get("key2del")].writeln;
+        /*
+        {
+            auto range = [
+                Pair("key:1:_1", "val-1(1)"),
+                Pair("key:1:_2", "val-2(1)"),
+                Pair("key:1:_3", "val-3(1)"),
+            ];
+            auto keys   = range.map!(x => x.key);
 
-            //db.del(["key-1","key-2","key-3"])
-            //    .checkTest(`db.del(["key-1","key-2","key-3"])`);
+            db.set(range)
+                .checkTest(`db.set(range) Set Pairs range`);
 
-            //db.get(["key-1","key-2","key-3"])
-            //    .writeln;
-                
-            //db.get(["key-1","key-2","key-3"])
-            //    .equal(Pair[].init)
-            //    .checkTest(`db.get(["key-1","key-2","key-3"]) (Empty values)`);
+            db.get(keys)
+                .equal(range)
+                .checkTest(`Get range & Check previous`);
+
+        }
+        */
+
+
+        //`[db.del(["key-1","key-2","key-3",])]`.writeln;
+        ////[db.del(["key-1","key-2","key-3",])].writeln;
+        //[db.del("key-1","key-2","key-3")].writeln;
+
+
+
 
 
 
@@ -209,19 +308,6 @@ void main(string[] args)
         //a.writeln;
         //[db.get(["key1","key2","key3",])].writeln;
 
-        //writeln(`[db.set("key2del", "KeyToDel")]:`);
-        //[db.set("key2del", "KeyToDel")].writeln;
-        //writeln(`[db.get("key2del")]:`);
-        //[db.get("key2del")].writeln;
-        //writeln(`[db.del("key2del")]:`);
-        //[db.del("key2del")].writeln;
-        //writeln(`[db.get("key2del")]:`);
-        //[db.get("key2del")].writeln;
-
-
-        //`[db.del(["key-1","key-2","key-3",])]`.writeln;
-        ////[db.del(["key-1","key-2","key-3",])].writeln;
-        //[db.del("key-1","key-2","key-3")].writeln;
 
         //`[db.get(["key-1","key-2","key-3",])]`.writeln;
         //[db.get(["key-1","key-2","key-3",])].writeln;
