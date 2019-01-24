@@ -103,10 +103,64 @@ string value = db.has(key).value;
 ```D
 auto range = db.getall(KeysPrefix);
 ```
-
+## More details
+For more details see [exmaples](exmaples), [tests](tests/readme.md) and
+[sources](source/drocks/client.d)
 
 # How to extend
 
+```D
+import drocks;
+struct CustomClient
+{
+    mixin ExtendClient;
+		...
+}
+```
+
+See [exmaple](exmaples/customclient.d):
+```D
+struct CustomClient
+{
+    mixin ExtendClient;
+
+    // incriment value by key
+    long getIncr(string key, long value)
+    {
+        return _db.request.httpPost("get-incr", key, value).getValue().to!long;
+    }
+    long getIncr(string key)
+    {
+        return _db.request.httpPost("get-incr", key).getValue().to!long;
+    }
+
+    // Check if DB server is available
+    bool ping() //const
+    {
+        return "pong" == _db.request.httpGet("ping").raw();
+    }
+
+    // Seack first pair by key prefix
+    auto seekFirst(string prefix)
+    {
+        return _db.request.httpGet("seek-first", prefix).getPair();
+    }
+
+		// ...
+}
+```
+
+```D
+try {
+		auto db = CustomClient.createDefault();
+		db.get("key1").writeln;
+		db.getIncr("incr1").writeln;
+		db.ping().writeln;
+		db.seekFirst("key-prefix:").writeln;
+} catch (ClientException e) {
+		writeln(e.msg);
+}
+```
 
 # Tests
 
