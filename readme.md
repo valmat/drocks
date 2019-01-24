@@ -1,5 +1,8 @@
 ![Drocks is a Dlang driver for RocksDB server RocksServer](small-logo.png) Drocks is a Dlang driver for RocksDB server [RocksServer](https://github.com/valmat/RocksServer)
 
+[![Dub version](https://img.shields.io/dub/v/drocks.svg)](https://code.dlang.org/packages/drocks/~master)
+[![License](https://img.shields.io/dub/l/vest.svg)](https://code.dlang.org/packages/drocks/)
+
 # Usage
 
 ## Create
