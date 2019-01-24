@@ -75,7 +75,7 @@ public:
 
         if (helpInformation.helpWanted) {
             defaultGetoptPrinter(
-                "Some information about the program.", 
+                "Run tets for drocks - RocksServer client", 
                 helpInformation.options
             );
             _valid = false;

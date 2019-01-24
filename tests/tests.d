@@ -78,7 +78,6 @@ void main(string[] args)
             db.get(pair.key)
                 .equal(pair.value)
                 .checkTest(`Single get & Check previous`);
-
         }
 
         headTest("Set Pairs range");

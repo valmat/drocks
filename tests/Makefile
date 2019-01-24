@@ -7,9 +7,6 @@ SOURCES_mdl = $(shell find -L "./modules/" -type f -name '*.d')
 # dmd
 DCMP  = dmd -debug -w -g -wi ${DINCL}
 DLD   = dmd -debug -w -g -wi
-# ldc
-#DCMP  = ldc2 -gc -O0 -de -d-debug=2 -w -wi ${DINCL} -check-printf-calls -boundscheck=on -enable-asserts -enable-color -enable-invariants -enable-contracts -enable-implicit-null-checks -enable-postconditions -enable-preconditions
-#DLD   = ldc2 -gc -O0 -w -wi
 
 # Dlang compiler/linker out option
 DOUT = -of=
@@ -54,7 +51,7 @@ endif
 .PHONY: clean release all cleanall
 
 # make dev version
-all: bin/tests.bin
+all: tests.bin
 	@echo
 	@echo "\033[1;36mBuild complite \033[0m"
 
@@ -65,16 +62,12 @@ release:
 o/tests.o: tests.d
 	${DCMP} -c tests.d ${DOUT}o/tests.o
 
-# SOURCES = $(SOURCES_lib) $(SOURCES_mdl)
-
 OBJECTS_lib := $(patsubst ../source/drocks/%.d,o/lib/%.o, $(SOURCES_lib))
 OBJECTS_mdl := $(patsubst ./modules/%.d,o/mdl/%.o, $(SOURCES_mdl))
 
-
-
-bin/tests.bin:  o/tests.o $(OBJECTS_lib) $(OBJECTS_mdl)
+tests.bin:  o/tests.o $(OBJECTS_lib) $(OBJECTS_mdl)
 	@echo ""
-	${DLD} -w o/tests.o $(OBJECTS_mdl) $(OBJECTS_lib) ${DOUT}bin/tests.bin
+	${DLD} -w o/tests.o $(OBJECTS_mdl) $(OBJECTS_lib) ${DOUT}tests.bin
 	@echo ""
 
 
@@ -87,5 +80,5 @@ $(OBJECTS_mdl) : o/mdl/%.o : ./modules/%.d
 
 clean:
 	find o/ -type f -name '*.o' -delete
-	rm -f bin/*.bin bin/*.a
+	rm -f *.bin
 
