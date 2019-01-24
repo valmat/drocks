@@ -32,9 +32,7 @@ void main(string[] args)
     auto server = ServerRunner(opts.servOpts);
 
     try {
-        
-        //auto db = Client(host, opts.port.to!ushort);
-        auto db = Client("127.0.0.1", opts.port.to!ushort);
+        auto db = Client(opts.host, opts.port.to!ushort);
 
         //
         // Now DB is empty
