@@ -1,0 +1,8 @@
+{
+	"name": "drocks",
+	"description": "RocksServer db client",
+	"targetType": "library",
+    "authors": ["Valmat"],
+    "homepage": "https://github.com/valmat/drocks",
+    "license": "MIT"
+}
