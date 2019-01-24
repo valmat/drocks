@@ -215,7 +215,7 @@ public:
 //struct CustomClient
 //{
 //    mixin ExtendClient;
-//    long getCastom(string key)
+//    string getCastom(string key)
 //    {
 //        return _db.request.httpGet("castom", key).getValue();
 //    }
@@ -243,7 +243,7 @@ public:
         return rez;
     }
 
-    auto opDispatch(string methodName, Args...)(Args args) {
+    auto opDispatch(string methodName, Args...)(auto ref Args args) {
         return mixin("_db." ~ methodName)(args);
     }
 }

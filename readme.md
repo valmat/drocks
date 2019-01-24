@@ -11,7 +11,6 @@ or
 auto db = Client.createDefault();
 ```
 
-
 ## Get
 
 ### By single key
@@ -44,25 +43,25 @@ db[key] = value;
 
 ```D
 auto range = [
-		Pair(key1, val1),
-		Pair(key2, val2),
-		Pair(key3, val3),
+    Pair(key1, val1),
+    Pair(key2, val2),
+    Pair(key3, val3),
 ];
 db.set(range);
 ```
 ```D
 auto range = [
-		tuple(key1, val1),
-		tuple(key2, val2),
-		tuple(key3, val3),
+    tuple(key1, val1),
+    tuple(key2, val2),
+    tuple(key3, val3),
 ];
 db.set(range);
 ```
 ```D
 auto map = [
-		key1: val1,
-		key2: val2,
-		key3: val3,
+    key1: val1,
+    key2: val2,
+    key3: val3,
 ];
 db.set(map);
 ```
@@ -114,7 +113,7 @@ import drocks;
 struct CustomClient
 {
     mixin ExtendClient;
-		...
+    //...
 }
 ```
 
@@ -146,22 +145,26 @@ struct CustomClient
         return _db.request.httpGet("seek-first", prefix).getPair();
     }
 
-		// ...
+    // ...
 }
 ```
 
 ```D
 try {
-		auto db = CustomClient.createDefault();
-		db.get("key1").writeln;
-		db.getIncr("incr1").writeln;
-		db.ping().writeln;
-		db.seekFirst("key-prefix:").writeln;
+    auto db = CustomClient.createDefault();
+    db.get("key1").writeln;
+    db.getIncr("incr1").writeln;
+    db.ping().writeln;
+    db.seekFirst("key-prefix:").writeln;
 } catch (ClientException e) {
-		writeln(e.msg);
+    writeln(e.msg);
 }
 ```
 
 # Tests
 
 [see tests readme](tests/readme.md)
+
+# License
+
+[MIT](LICENSE)
