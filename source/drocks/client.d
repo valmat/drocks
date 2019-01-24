@@ -98,8 +98,7 @@ public:
         return _req.httpPost("mdel", args).isOk();
     }
 
-
-    // incriment value by key
+    // Increment value by key
     bool incr(string key, long value)
     {
         return _req.httpPost("incr", key, value ).isOk();
