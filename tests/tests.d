@@ -4,7 +4,6 @@ import std.stdio      : writeln;
 import std.typecons   : Tuple, tuple;
 import std.range      : array, byPair;
 import std.algorithm  : map, equal;
-import std.functional : forward;
 import std.conv       : to;
 
 import drocks;
@@ -133,6 +132,16 @@ void main(string[] args)
             db.get(keys)
                 .equal(range)
                 .checkTest(`Get range & Check previous`);
+        }
+
+        headTest("Replace key");
+        {
+            db.set("key:3:*2", "**val-2##")
+                .checkTest(`db.set(key)`);
+
+            db.get("key:3:*2")
+                .equal("**val-2##")
+                .checkTest(`Check replaced key`);
         }
 
         headTest("Get multiargs");
@@ -439,7 +448,7 @@ void main(string[] args)
                     Pair("key:2:_2", "val-2@2"),
                     Pair("key:2:_3", "val-3@2"),
                     Pair("key:3:*1", "val-1*"),
-                    Pair("key:3:*2", "val-2*"),
+                    Pair("key:3:*2", "**val-2##"),
                     Pair("key:3:*3", "val-3*")
                 ])
                 .checkTest(`Check Prefix iterator`);
@@ -463,7 +472,7 @@ void main(string[] args)
                     Pair("key:2:_2", "val-2@2"),
                     Pair("key:2:_3", "val-3@2"),
                     Pair("key:3:*1", "val-1*"),
-                    Pair("key:3:*2", "val-2*"),
+                    Pair("key:3:*2", "**val-2##"),
                     Pair("key:3:*3", "val-3*"),
                     Pair("pref:_0_", "\r\n1\n%%%\t^\n"),
                     Pair("pref:_1_", "\r\n2\n%%%\t^\n"),
@@ -481,8 +490,6 @@ void main(string[] args)
                 .checkTest(`Check db.stats().length`);
         }
         headTest("");
-
-
 
     } catch (ClientException e) {
         writeln([e.msg, e.file], e.line);

@@ -1,22 +1,12 @@
 module opts;
 
-
-import std.stdio    ;
-import std.typecons ;//: Tuple, tuple;
-import std.range    ;//: array;
-import std.file;//.tempDir
-import std.random;
-import std.string;
-import std.conv : to;
-import std.algorithm;
-import std.algorithm  : splitter, joiner;
-import std.range      : enumerate;
-import std.string     : indexOf, strip;
-import std.functional : forward;
-import std.stdio      : File;
-import std.conv : to;
-import std.getopt;
-import std.path : buildPath;
+import std.stdio  : writeln, write;
+import std.file   : mkdirRecurse, rmdirRecurse, tempDir;
+import std.random : Random, uniform, unpredictableSeed;
+import std.string : leftJustifier;
+import std.conv   : to;
+import std.getopt : getopt, defaultGetoptPrinter;
+import std.path   : buildPath;
 
 import ini : file2map, map2file;
 

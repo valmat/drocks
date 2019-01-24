@@ -1,8 +1,6 @@
 module ini;
 
 import std.stdio     : writeln;
-import std.string    : leftJustifier;
-import std.conv      : to;
 import std.algorithm : map, filter;
 import std.string    : indexOf, strip;
 import std.stdio     : File;
