@@ -11,10 +11,8 @@ DLD   = dmd -debug -w -g -wi
 #DCMP  = ldc2 -gc -O0 -de -d-debug=2 -w -wi ${DINCL} -check-printf-calls -boundscheck=on -enable-asserts -enable-color -enable-invariants -enable-contracts -enable-implicit-null-checks -enable-postconditions -enable-preconditions
 #DLD   = ldc2 -gc -O0 -w -wi
 
-LPHOBOS = -lphobos2
-
 # Dlang compiler/linker out option
-DOUT	   = -of=
+DOUT = -of=
 
 ifeq ($(BUILD),release)   
 	# Dlang
@@ -33,17 +31,13 @@ ifeq ($(BUILD),release)
 	# 	/usr/lib/x86_64-linux-gnu/libdruntime-ldc.a \
 	# 	-L-lz
 
-	# DLD	  = ldc2 -O3 -dw -release -w \
-	# 	-link-defaultlib-shared=false \
-	# 	-defaultlib=:libphobos2-ldc.a,:libdruntime-ldc.a,:libz.a
-
 	DLD	  = ldc2 -O3 -dw -release -w \
 		-link-defaultlib-shared=false \
-		-L-l:libphobos2-ldc.a -L-l:libdruntime-ldc.a -L-l:libz.a
+		-defaultlib=:libphobos2-ldc.a,:libdruntime-ldc.a,:libz.a
 
-	LPHOBOS = /usr/lib/x86_64-linux-gnu/libphobos2.a \
-		/usr/lib/x86_64-linux-gnu/libphobos2-ldc.a \
-		/usr/lib/x86_64-linux-gnu/libdruntime-ldc.a \
+	# DLD	  = ldc2 -O3 -dw -release -w \
+	# 	-link-defaultlib-shared=false \
+	# 	-L-l:libphobos2-ldc.a -L-l:libdruntime-ldc.a -L-l:libz.a
 
 	# gdc
 	#DCMP  = gdc -Wp,-color,-O,-inline,-release,-w,-boundscheck=off -Wa,-w

@@ -92,19 +92,22 @@ public:
             return;
         }
 
-        buildPath(tmpDir ~ "/backup")  .mkdirRecurse; 
-buildPath(tmpDir ~ "/plugins") .mkdirRecurse;
-        buildPath(tmpDir ~ "/db")      .mkdirRecurse;
-
         if(configFile.length) {
             cfgMap = configFile.file2map;
         }
 
-        cfgMap["log_level"]      = "debug"; 
-        cfgMap["error_log"]      = tmpDir ~ "/error.log"; 
-        cfgMap["backup_path"]    = tmpDir ~ "/backup"; 
-        cfgMap["extdir"]         = tmpDir ~ "/plugins";
-        cfgMap["db_path"]        = tmpDir ~ "/db";
+        cfgMap["log_level"]   = "debug"; 
+        cfgMap["error_log"]   = tmpDir ~ "/error.log"; 
+        cfgMap["backup_path"] = tmpDir ~ "/backup"; 
+        cfgMap["db_path"]     = tmpDir ~ "/db";
+
+        if("extdir" !in cfgMap) {
+            cfgMap["extdir"] = tmpDir ~ "/plugins";
+            buildPath(tmpDir ~ "/plugins").mkdirRecurse;
+        }
+        
+        buildPath(tmpDir ~ "/backup").mkdirRecurse; 
+        buildPath(tmpDir ~ "/db")    .mkdirRecurse;
 
         //if(host.length) {
         //    cfgMap["server_host"] = host;
@@ -113,10 +116,8 @@ buildPath(tmpDir ~ "/plugins") .mkdirRecurse;
             cfgMap["server_port"] = port;
         }
 
-
         // Create INI configs file
         cfgMap.map2file(configFileNew);
-
     }
 
     ~this()
