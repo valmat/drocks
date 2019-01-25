@@ -1,6 +1,5 @@
 module drocks.client;
 
-import std.stdio  : stderr, writeln;
 import std.range    : join, isInputRange, ElementType;
 import std.traits   : isIntegral;
 import std.typecons : Tuple, tuple;
@@ -58,6 +57,7 @@ public:
     {
         return this.set(Pair(key, val));
     }
+
     bool set(Pair pair)
     {
         return _req.httpPost("set", pair.serialize()).isOk();
@@ -69,11 +69,13 @@ public:
     {
         return _req.httpPost("mset", pairs).isOk();
     }
+
     bool set(Range)(auto ref Range pairs)
         if(isInputRange!Range && is(ElementType!Range: Tuple!(string, string)))
     {
         return _req.httpPost("mset", pairs).isOk();
     }
+
     bool set(string[string] pairs)
     {
         return _req.httpPost("mset", pairs.byPair()).isOk();
@@ -103,6 +105,7 @@ public:
     {
         return _req.httpPost("incr", key, value ).isOk();
     }
+    
     bool incr(string key)
     {
         return _req.httpPost("incr", key).isOk();

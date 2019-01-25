@@ -1,4 +1,4 @@
-# Run tets for drocks - RocksServer client
+# Run tets for drocks
 
 ## Compile
 
@@ -8,7 +8,7 @@ make
 
 ## Run
 
-```bash
+```c
 $ ./tests.bin -h
 Run tets for drocks - RocksServer client
 -b --binary RocksServer binary file location.
@@ -16,7 +16,7 @@ Run tets for drocks - RocksServer client
 -c --config RocksServer config file location.
 		By default created automatically
 -t    --tmp temporary dir.
-		Default: "/tmp/rocksserver.2015897473"
+		Default: "/tmp/"
 
 -p   --port DB port. Default: "5541".
 
