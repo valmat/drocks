@@ -1,10 +1,10 @@
 #!/usr/bin/rdmd --shebang=-I../source -I.  -I./modules
 
-import std.stdio      : writeln;
-import std.typecons   : Tuple, tuple;
-import std.range      : array, byPair;
-import std.algorithm  : map, equal;
-import std.conv       : to;
+import std.stdio     : writeln;
+import std.typecons  : Tuple, tuple;
+import std.range     : array, byPair;
+import std.algorithm : map, equal;
+import std.conv      : to;
 
 import drocks;
 import opts   : Opts;
@@ -21,11 +21,11 @@ bool eq(T)(auto ref T lhs, auto ref T rhs) {return lhs == rhs;}
 //    if (isInputRange!T1 && isInputRange!T2)
 //{return .equal(lhs, rhs);}
 
-void main(string[] args)
+int main(string[] args)
 {
     auto opts = Opts(args);
     if (!opts.valid) {
-        return;
+        return 1;
     }
     opts.show();
 
@@ -490,7 +490,10 @@ void main(string[] args)
 
     } catch (ClientException e) {
         writeln([e.msg, e.file], e.line);
+        return 1;
     } catch (Exception e) {
         writeln("\n", e.msg);
+        return 1;
     }
+    return 0;
 }

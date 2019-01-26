@@ -15,7 +15,7 @@ void checkTest(bool valid, string msg)
         writeln(c.green, "OK", c.reset);
     } else {
         writeln(c.red, "FAIL", c.reset);
-        throw new Exception("Failed test " ~ msg);
+        throw new Exception("Failed test: " ~ msg);
     }
 }
 
