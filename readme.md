@@ -105,6 +105,122 @@ string value = db.has(key).value;
 ```D
 auto range = db.getall(KeysPrefix);
 ```
+
+## Seek key and iterate
+
+
+```d
+db.set([
+    "w:a" : "v-w:a",
+    "w:c" : "v-w:c",
+    "w:e" : "v-w:e",
+    "w:g" : "v-w:g",
+    "w:h" : "v-w:h",
+    "w:l" : "v-w:l",
+    "x:a" : "v-x:a",
+    "x:c" : "v-x:c",
+]);
+```
+
+
+`db.seekPrev("w:d")` retrieves range:
+```d
+["w:c", "w:e", "w:g", "w:h", "w:l", "x:a", "x:c"]
+```
+
+`db.seekPrev("w:d", "w:")` retrieves range:
+```d
+["w:c", "w:e", "w:g", "w:h", "w:l"]
+```
+
+`db.seekPrev("w:e")` retrieves range:
+```d
+["w:e", "w:g", "w:h", "w:l", "x:a", "x:c"]
+```
+
+`db.seekPrev("w:e", "w:")` retrieves range:
+```d
+["w:e", "w:g", "w:h", "w:l"]
+```
+
+`db.seekPrev("0:e")` retrieves all pairs
+
+`db.seekPrev("0:e", "w:")` retrieves empty range
+
+`db.seekPrevRange("w:d", "x:b")` retrieves range:
+```d
+["w:c", "w:e", "w:g", "w:h", "w:l", "x:a"]
+```
+
+`db.seekPrevRange("w:d", "x:b", "w:")` retrieves range:
+```d
+["w:c", "w:e", "w:g", "w:h", "w:l"]
+```
+
+`db.seekPrevRange("w:e", "x:b")` retrieves range:
+```d
+["w:e", "w:g", "w:h", "w:l", "x:a"]
+```
+
+`db.seekPrevRange("w:e", "x:a")` retrieves range:
+```d
+["w:e", "w:g", "w:h", "w:l", "x:a"]
+```
+
+`db.seekPrevRange("w:e", "x:b", "w:")` retrieves range:
+```d
+["w:e", "w:g", "w:h", "w:l"]
+```
+
+`db.seekNext("w:d")` retrieves range:
+```d
+["w:c", "w:e", "w:g", "w:h", "w:l", "x:a", "x:c"]
+```
+
+`db.seekNext("w:d", "w:")` retrieves range:
+```d
+["w:c", "w:e", "w:g", "w:h", "w:l"]
+```
+
+`db.seekNext("w:e")` retrieves range:
+```d
+["w:e", "w:g", "w:h", "w:l", "x:a", "x:c"]
+```
+
+`db.seekNext("w:e", "w:")` retrieves range:
+```d
+["w:e", "w:g", "w:h", "w:l"]
+```
+
+`db.seekNext("0:e")` retrieves all pairs
+
+`db.seekNext("0:e", "w:")` retrieves empty range
+
+`db.seekNextRange("w:d", "x:b")` retrieves range:
+```d
+["w:c", "w:e", "w:g", "w:h", "w:l", "x:a"]
+```
+
+`db.seekNextRange("w:d", "x:b", "w:")` retrieves range:
+```d
+["w:c", "w:e", "w:g", "w:h", "w:l"]
+```
+
+`db.seekNextRange("w:e", "x:b")` retrieves range:
+```d
+["w:e", "w:g", "w:h", "w:l", "x:a"]
+```
+
+`db.seekNextRange("w:e", "x:a")` retrieves range:
+```d
+["w:e", "w:g", "w:h", "w:l", "x:a"]
+```
+
+`db.seekNextRange("w:e", "x:b", "w:")` retrieves range:
+```d
+["w:e", "w:g", "w:h", "w:l"]
+```
+
 ## More details
 For more details see [exmaples](exmaples), [tests](tests/readme.md) and
 [sources](source/drocks/client.d)
