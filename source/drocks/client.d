@@ -123,8 +123,6 @@ public:
         return _req.httpGet("tail").getMultiPair();
     }
 
-
-    
     // multi get key-value pairs by seek key
     auto seekPrev(string prefixStart)
     {
@@ -167,7 +165,6 @@ public:
         // GET /seeknext-range?<key-prefix-start>&<key-prefix-end>&<starts-with>
         return _req.httpGet("seekprev-range", prefixStart, prefixEnd, startsWith).getMultiPair();
     }
-
 
     // Make database backup
     bool backup()
