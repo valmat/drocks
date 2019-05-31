@@ -433,7 +433,6 @@ int main(string[] args)
             //db.backupInfo.map!(x => x.id).writeln;
         }
 
-        //key:
         headTest("Other iterators");
         {
             db.getall("key:")
@@ -477,6 +476,119 @@ int main(string[] args)
                     Pair("pref:_4_", "\n4\n%\t^%%\n\r")
                 ])
                 .checkTest(`Check all-pairs iterator`);
+        }
+
+        headTest("Seek key");
+        {
+            db.set([
+                "w:a" : "v-w:a",
+                "w:c" : "v-w:c",
+                "w:e" : "v-w:e",
+                "w:g" : "v-w:g",
+                "w:h" : "v-w:h",
+                "w:l" : "v-w:l",
+                "x:a" : "v-x:a",
+                "x:c" : "v-x:c",
+            ]);
+
+            //db.seekPrev("w:d").writeln;
+            db.seekPrev("w:d")
+                .equal([Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a"), Pair("x:c", "v-x:c")])
+                .checkTest(`seekPrev(prefixStart)`);
+            //db.seekPrev("w:d", "w:").writeln;
+            db.seekPrev("w:d", "w:")
+                .equal([Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l")])
+                .checkTest(`seekPrev(prefixStart, startsWith)`);
+
+            //db.seekPrev("w:e").writeln;
+            db.seekPrev("w:e")
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a"), Pair("x:c", "v-x:c")])
+                .checkTest(`seekPrev(prefixStart)`);
+            //db.seekPrev("w:e", "w:").writeln;
+            db.seekPrev("w:e", "w:")
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l")])
+                .checkTest(`seekPrev(prefixStart, startsWith)`);
+
+            //db.seekPrev("0:e").writeln;
+            db.seekPrev("0:e")
+                .equal([Pair("dgdg", "QQQqqqQQQ"), Pair("hyhy", "JfTdW"), Pair("incr1", "1"), Pair("incr2", "5"), Pair("incr3", "-11"), Pair("incr4", "1"), Pair("incr5", "-1"), Pair("incr6", "4294967295"), Pair("incr7", "-4294967295"), Pair("incr8", "-4294967295"), Pair("key:1:_1", "val-1(1)"), Pair("key:1:_2", "val-2(1)"), Pair("key:1:_3", "val-3(1)"), Pair("key:2:_1", "val-1@2"), Pair("key:2:_2", "val-2@2"), Pair("key:2:_3", "val-3@2"), Pair("key:3:*1", "val-1*"), Pair("key:3:*2", "**val-2##"), Pair("key:3:*3", "val-3*"), Pair("pref:_0_", "\r\n1\n%%%\t^\n"), Pair("pref:_1_", "\r\n2\n%%%\t^\n"), Pair("pref:_2_", "\r\n3\n%%%\t^\n"), Pair("pref:_4_", "\n4\n%\t^%%\n\r"), Pair("w:a", "v-w:a"), Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a"), Pair("x:c", "v-x:c")])
+                .checkTest(`seekPrev(prefixStart)`);
+            //db.seekPrev("0:e", "w:").writeln;
+            db.seekPrev("0:e", "w:")
+                .equal(Pair[].init)
+                .checkTest(`seekPrev(prefixStart, startsWith)`);
+
+            //db.seekPrevRange("w:d", "x:b").writeln;
+            db.seekPrevRange("w:d", "x:b")
+                .equal([Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a")])
+                .checkTest(`seekPrevRange(prefixStart, prefixEnd)`);
+            //db.seekPrevRange("w:d", "x:b", "w:").writeln;
+            db.seekPrevRange("w:d", "x:b", "w:")
+                .equal([Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l")])
+                .checkTest(`seekPrevRange(prefixStart, prefixEnd, startsWith)`);
+
+            //db.seekPrevRange("w:e", "x:b").writeln;
+            db.seekPrevRange("w:e", "x:b")
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a")])
+                .checkTest(`seekPrevRange(prefixStart, prefixEnd)`);
+            //db.seekPrevRange("w:e", "x:a").writeln;
+            db.seekPrevRange("w:e", "x:a")
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a")])
+                .checkTest(`seekPrevRange(prefixStart, prefixEnd)`);
+            //db.seekPrevRange("w:e", "x:b", "w:").writeln;
+            db.seekPrevRange("w:e", "x:b", "w:")
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l")])
+                .checkTest(`seekPrevRange(prefixStart, prefixEnd, startsWith)`);
+
+
+            //db.seekNext("w:d").writeln;
+            db.seekNext("w:d")
+                .equal([Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a"), Pair("x:c", "v-x:c")])
+                .checkTest(`seekNext(prefixStart)`);
+            //db.seekNext("w:d", "w:").writeln;
+            db.seekNext("w:d", "w:")
+                .equal([Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l")])
+                .checkTest(`seekNext(prefixStart, startsWith)`);
+
+            //db.seekNext("w:e").writeln;
+            db.seekNext("w:e")
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a"), Pair("x:c", "v-x:c")])
+                .checkTest(`seekNext(prefixStart)`);
+            //db.seekNext("w:e", "w:").writeln;
+            db.seekNext("w:e", "w:")
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l")])
+                .checkTest(`seekNext(prefixStart, startsWith)`);
+
+            //db.seekNext("0:e").writeln;
+            db.seekNext("0:e")
+                .equal([Pair("dgdg", "QQQqqqQQQ"), Pair("hyhy", "JfTdW"), Pair("incr1", "1"), Pair("incr2", "5"), Pair("incr3", "-11"), Pair("incr4", "1"), Pair("incr5", "-1"), Pair("incr6", "4294967295"), Pair("incr7", "-4294967295"), Pair("incr8", "-4294967295"), Pair("key:1:_1", "val-1(1)"), Pair("key:1:_2", "val-2(1)"), Pair("key:1:_3", "val-3(1)"), Pair("key:2:_1", "val-1@2"), Pair("key:2:_2", "val-2@2"), Pair("key:2:_3", "val-3@2"), Pair("key:3:*1", "val-1*"), Pair("key:3:*2", "**val-2##"), Pair("key:3:*3", "val-3*"), Pair("pref:_0_", "\r\n1\n%%%\t^\n"), Pair("pref:_1_", "\r\n2\n%%%\t^\n"), Pair("pref:_2_", "\r\n3\n%%%\t^\n"), Pair("pref:_4_", "\n4\n%\t^%%\n\r"), Pair("w:a", "v-w:a"), Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a"), Pair("x:c", "v-x:c")])
+                .checkTest(`seekNext(prefixStart)`);
+            //db.seekNext("0:e", "w:").writeln;
+            db.seekNext("0:e", "w:")
+                .equal(Pair[].init)
+                .checkTest(`seekNext(prefixStart, startsWith)`);
+
+            //db.seekNextRange("w:d", "x:b").writeln;
+            db.seekNextRange("w:d", "x:b")
+                .equal([Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a")])
+                .checkTest(`seekNextRange(prefixStart, prefixEnd)`);
+            //db.seekNextRange("w:d", "x:b", "w:").writeln;
+            db.seekNextRange("w:d", "x:b", "w:")
+                .equal([Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l")])
+                .checkTest(`seekNextRange(prefixStart, prefixEnd, startsWith)`);
+
+            //db.seekNextRange("w:e", "x:b").writeln;
+            db.seekNextRange("w:e", "x:b")
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a")])
+                .checkTest(`seekNextRange(prefixStart, prefixEnd)`);
+            //db.seekNextRange("w:e", "x:a").writeln;
+            db.seekNextRange("w:e", "x:a")
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a")])
+                .checkTest(`seekNextRange(prefixStart, prefixEnd)`);
+            //db.seekNextRange("w:e", "x:b", "w:").writeln;
+            db.seekNextRange("w:e", "x:b", "w:")
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l")])
+                .checkTest(`seekNextRange(prefixStart, prefixEnd, startsWith)`);
         }
 
         headTest("stats");

@@ -123,6 +123,52 @@ public:
         return _req.httpGet("tail").getMultiPair();
     }
 
+
+    
+    // multi get key-value pairs by seek key
+    auto seekPrev(string prefixStart)
+    {
+        // GET /seekprev?<key-prefix-start>
+        return _req.httpGet("seekprev", prefixStart).getMultiPair();
+    }
+    auto seekPrev(string prefixStart, string startsWith)
+    {
+        // GET /seekprev?<key-prefix-start>&<starts-with>
+        return _req.httpGet("seekprev", prefixStart, startsWith).getMultiPair();
+    }
+    auto seekPrevRange(string prefixStart, string prefixEnd)
+    {
+        // GET /seekprev-range?<key-prefix-start>&<key-prefix-end>
+        return _req.httpGet("seekprev-range", prefixStart, prefixEnd).getMultiPair();
+    }
+    auto seekPrevRange(string prefixStart, string prefixEnd, string startsWith)
+    {
+        // GET /seekprev-range?<key-prefix-start>&<key-prefix-end>&<starts-with>
+        return _req.httpGet("seekprev-range", prefixStart, prefixEnd, startsWith).getMultiPair();
+    }
+
+    auto seekNext(string prefixStart)
+    {
+        // GET /seeknext?<key-prefix-start>
+        return _req.httpGet("seekprev", prefixStart).getMultiPair();
+    }
+    auto seekNext(string prefixStart, string startsWith)
+    {
+        // GET /seeknext?<key-prefix-start>&<starts-with>
+        return _req.httpGet("seekprev", prefixStart, startsWith).getMultiPair();
+    }
+    auto seekNextRange(string prefixStart, string prefixEnd)
+    {
+        // GET /seeknext-range?<key-prefix-start>&<key-prefix-end>
+        return _req.httpGet("seekprev-range", prefixStart, prefixEnd).getMultiPair();
+    }
+    auto seekNextRange(string prefixStart, string prefixEnd, string startsWith)
+    {
+        // GET /seeknext-range?<key-prefix-start>&<key-prefix-end>&<starts-with>
+        return _req.httpGet("seekprev-range", prefixStart, prefixEnd, startsWith).getMultiPair();
+    }
+
+
     // Make database backup
     bool backup()
     {
