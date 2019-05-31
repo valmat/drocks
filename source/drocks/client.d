@@ -148,22 +148,22 @@ public:
     auto seekNext(string prefixStart)
     {
         // GET /seeknext?<key-prefix-start>
-        return _req.httpGet("seekprev", prefixStart).getMultiPair();
+        return _req.httpGet("seeknext", prefixStart).getMultiPair();
     }
     auto seekNext(string prefixStart, string startsWith)
     {
         // GET /seeknext?<key-prefix-start>&<starts-with>
-        return _req.httpGet("seekprev", prefixStart, startsWith).getMultiPair();
+        return _req.httpGet("seeknext", prefixStart, startsWith).getMultiPair();
     }
     auto seekNextRange(string prefixStart, string prefixEnd)
     {
         // GET /seeknext-range?<key-prefix-start>&<key-prefix-end>
-        return _req.httpGet("seekprev-range", prefixStart, prefixEnd).getMultiPair();
+        return _req.httpGet("seeknext-range", prefixStart, prefixEnd).getMultiPair();
     }
     auto seekNextRange(string prefixStart, string prefixEnd, string startsWith)
     {
         // GET /seeknext-range?<key-prefix-start>&<key-prefix-end>&<starts-with>
-        return _req.httpGet("seekprev-range", prefixStart, prefixEnd, startsWith).getMultiPair();
+        return _req.httpGet("seeknext-range", prefixStart, prefixEnd, startsWith).getMultiPair();
     }
 
     // Make database backup
