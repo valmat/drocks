@@ -531,10 +531,10 @@ int main(string[] args)
 
 
             db.seekNext("w:d")
-                .equal([Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a"), Pair("x:c", "v-x:c")])
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a"), Pair("x:c", "v-x:c")])
                 .checkTest(`seekNext(prefixStart)`);
             db.seekNext("w:d", "w:")
-                .equal([Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l")])
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l")])
                 .checkTest(`seekNext(prefixStart, startsWith)`);
 
             db.seekNext("w:e")
@@ -552,10 +552,10 @@ int main(string[] args)
                 .checkTest(`seekNext(prefixStart, startsWith)`);
 
             db.seekNextRange("w:d", "x:b")
-                .equal([Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a")])
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l"), Pair("x:a", "v-x:a")])
                 .checkTest(`seekNextRange(prefixStart, prefixEnd)`);
             db.seekNextRange("w:d", "x:b", "w:")
-                .equal([Pair("w:c", "v-w:c"), Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l")])
+                .equal([Pair("w:e", "v-w:e"), Pair("w:g", "v-w:g"), Pair("w:h", "v-w:h"), Pair("w:l", "v-w:l")])
                 .checkTest(`seekNextRange(prefixStart, prefixEnd, startsWith)`);
 
             db.seekNextRange("w:e", "x:b")
