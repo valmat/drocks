@@ -57,7 +57,7 @@ all: tests.bin
 
 # make release version
 release:
-	make "BUILD=release"
+	make "BUILD=release" -j8
 
 o/tests.o: tests.d
 	${DCMP} -c tests.d ${DOUT}o/tests.o
