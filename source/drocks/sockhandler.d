@@ -31,11 +31,6 @@ public:
         _sock   = new TcpSocket();
     }
 
-    ~this()
-    {
-        this.close();
-    }
-
     bool isValid() const
     {
         return _opened && _valid && _sock.isAlive();
@@ -43,7 +38,7 @@ public:
     
     void close()
     {
-        if(_opened) {
+        if(_opened && _sock !is null && _sock.isAlive()) {
             _sock.close();
             _opened = false;
         }
