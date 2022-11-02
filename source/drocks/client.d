@@ -28,7 +28,7 @@ public:
         return Client("localhost", 5533);
     }
 
-    ref Request request()
+    ref Request request() return
     {
         return _req;
     }

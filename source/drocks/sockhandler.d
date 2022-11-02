@@ -88,10 +88,10 @@ public:
     char[] read(size_t num)
     {
         _line_buf.length = 0;
-        size_t i = 0;
-        for(auto c = getChar(); i < num && isValid(); ++i, c = getChar()) {
-            _line_buf ~= c;
-        }
+        _line_buf.reserve(num);
+        for(size_t i = 0; i < num && isValid(); ++i) {
+            _line_buf ~= getChar();
+        }        
         return _line_buf;
     }
 
