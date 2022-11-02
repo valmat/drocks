@@ -1,4 +1,4 @@
-#!/usr/bin/rdmd --shebang=-I../source -I.  -I./modules
+#!/usr/bin/rdmd --shebang=-I../source -I. -I./modules -w -g -debug
 
 import std.stdio     : writeln;
 import std.typecons  : Tuple, tuple;
@@ -9,7 +9,7 @@ import std.conv      : to;
 import drocks;
 import opts   : Opts;
 import server : ServerRunner;
-import check  : checkTest, headTest;
+import check  : checkTest, headTest, successMsg;
 
 bool not(T)(auto ref T x) {return !x;}
 bool eq(T)(auto ref T lhs, auto ref T rhs) {return lhs == rhs;}
@@ -576,7 +576,22 @@ int main(string[] args)
                 .not.not
                 .checkTest(`Check db.stats().length`);
         }
+
+        headTest("Extra tests 1");
+        {
+            string str = "6\nQWERTY\nOK\n";
+            db.set("extra_tests_1", str);
+            auto resp = db.request.httpGet("get", "extra_tests_1");
+            resp.getKey();
+
+            resp.getValue().equal("QWERTY")
+                .checkTest(`Extra tests 1 # 1`);
+            resp.isOk().checkTest(`Extra tests 1 # 2`);
+        }
+
         headTest("");
+
+        successMsg("All tests are successfully passed!");
 
     } catch (ClientException e) {
         writeln([e.msg, e.file], e.line);

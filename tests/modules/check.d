@@ -6,15 +6,24 @@ import std.conv   : to;
 
 static import c;
 
+void successMsg(string msg)
+{
+    writeln(c.green, msg, c.reset);
+}
+void failMsg(string msg)
+{
+    writeln(c.red, msg, c.reset);
+}
+
 void checkTest(bool valid, string msg)
 {
     write("\n   ", c.yellow, (msg ~ c.blue).to!string.leftJustifier(70, '.').to!string  );
     write(c.reset);
 
     if(valid) {
-        writeln(c.green, "OK", c.reset);
+        successMsg("OK");
     } else {
-        writeln(c.red, "FAIL", c.reset);
+        failMsg("FAIL");
         throw new Exception("Failed test: " ~ msg);
     }
 }
