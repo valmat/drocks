@@ -8,11 +8,23 @@ alias MultiPair  = Multi!"getPair";
 alias MultiKey   = Multi!"getKey";
 alias MultiValue = Multi!"getValue";
 
-struct Multi(string ValueType)
+struct Multi(alias fun)
 {
 private:
-    alias cursor_t = typeof(mixin("Response.init." ~ ValueType ~ "()"));
-    
+    static if (is(typeof(fun) : string)) {
+        alias cursor_t = typeof(mixin("Response.init." ~ fun ~ "()"));
+        auto _get()
+        {
+            return mixin("_resp." ~ fun ~ "()");
+        }
+    } else {
+        alias cursor_t = typeof(fun(Response.init));
+        auto _get()
+        {
+            return fun(_resp);
+        }
+    }    
+
     Response  _resp;
     cursor_t _cur;
 
@@ -21,7 +33,7 @@ public:
     this(Response resp)
     {
         _resp = resp;
-        _cur = mixin("_resp." ~ ValueType ~ "()");
+        _cur = _get();
     }
 
     bool empty() const @property
@@ -34,6 +46,6 @@ public:
     }
     void popFront()
     {
-        _cur = mixin("_resp." ~ ValueType ~ "()");
+        _cur = _get();
     }
 }

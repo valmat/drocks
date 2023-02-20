@@ -569,6 +569,45 @@ int main(string[] args)
                 .checkTest(`seekNextRange(prefixStart, prefixEnd, startsWith)`);
         }
 
+        headTest("Test Multi template");
+        {
+            auto doubleValue(Response resp)
+            {
+                return Pair(resp.getPair().value, resp.getPair().value);
+            }
+
+            db.set([
+                "multi-tpl:1" : "mt2-v=1",
+                "multi-tpl:2" : "mt2-v=2",
+                "multi-tpl:3" : "mt2-v=3",
+                "multi-tpl:4" : "mt2-v=4",
+                "multi-tpl:5" : "mt2-v=5",
+                "multi-tpl:6" : "mt2-v=6",
+                "multi-tpl:7" : "mt2-v=7",
+                "multi-tpl:8" : "mt2-v=8",
+            ]);
+            auto values = [
+                Pair("mt2-v=1", "mt2-v=2"),
+                Pair("mt2-v=3", "mt2-v=4"),
+                Pair("mt2-v=5", "mt2-v=6"),
+                Pair("mt2-v=7", "mt2-v=8")
+            ];
+            
+            db
+                .request
+                .httpGet("prefit", "multi-tpl:")
+                .Multi!doubleValue()
+                .equal(values)
+                .checkTest(`Multi template 1`);
+
+            db
+                .request
+                .httpGet("prefit", "multi-tpl:")
+                .Multi!((resp) => Pair(resp.getPair().value, resp.getPair().value))()
+                .equal(values)
+                .checkTest(`Multi template 2`);
+        }        
+
         headTest("stats");
         {
             db.stats()
